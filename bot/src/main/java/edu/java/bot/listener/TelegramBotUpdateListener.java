@@ -2,7 +2,9 @@ package edu.java.bot.listener;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.SetMyCommands;
 import edu.java.bot.updatewrapper.UpdateWrapper;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
@@ -27,6 +29,12 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     @PostConstruct
     void init() {
         telegramBot.setUpdatesListener(this);
+        telegramBot.execute(new SetMyCommands(
+            new BotCommand("/start", "Зарегистрировать пользователя"),
+            new BotCommand("/help", "Вывести окно с командами"),
+            new BotCommand("/list", "Показать список отслеживаемых ссылок"),
+            new BotCommand("/track", "Начать отслеживание ссылки"),
+            new BotCommand("/untrack", "Прекратить отслеживание ссылки")));
     }
 
     @Override
