@@ -10,7 +10,9 @@ import java.util.Properties;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.stereotype.Component;
 
+@Component
 public class HelpCommandHandler extends CommandHandler {
     private Properties properties;
 
@@ -29,10 +31,9 @@ public class HelpCommandHandler extends CommandHandler {
 
     @Override
     public boolean handleCommand(UpdateWrapper update) {
-        if (update.getMessageText().equals(command)) {
+        if (update.getCommand().equals(command)) {
             telegramBot.execute(new SendMessage(update.getChatId(), properties.getProperty("help.message")).parseMode(
                 ParseMode.Markdown));
-            logger.debug(properties.getProperty("help.message"));
             logger.info("Выдача меню помощи");
             return true;
         }

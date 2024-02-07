@@ -16,4 +16,17 @@ public class UpdateWrapper {
     public String getMessageText() {
         return update.message().text();
     }
+
+    public String getCommand() {
+        return getMessageText().split(" ")[0];
+    }
+
+    public String getURLFromMessage() {
+        String messageText = getMessageText();
+        return messageText.split(" ")[1];
+    }
+
+    public boolean containsUrlInMessage() {
+        return getMessageText().contains(" ");
+    }
 }
