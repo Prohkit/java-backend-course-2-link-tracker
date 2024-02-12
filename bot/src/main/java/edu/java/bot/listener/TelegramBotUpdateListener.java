@@ -8,14 +8,12 @@ import com.pengrad.telegrambot.request.SetMyCommands;
 import edu.java.bot.updatewrapper.UpdateWrapper;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class TelegramBotUpdateListener implements UpdatesListener {
-
-    private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdateListener.class);
 
     private final TelegramBot telegramBot;
 
@@ -34,7 +32,8 @@ public class TelegramBotUpdateListener implements UpdatesListener {
             new BotCommand("/help", "Вывести окно с командами"),
             new BotCommand("/list", "Показать список отслеживаемых ссылок"),
             new BotCommand("/track", "Начать отслеживание ссылки"),
-            new BotCommand("/untrack", "Прекратить отслеживание ссылки")));
+            new BotCommand("/untrack", "Прекратить отслеживание ссылки")
+        ));
     }
 
     @Override

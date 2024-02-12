@@ -2,14 +2,12 @@ package edu.java.bot.listener;
 
 import edu.java.bot.commandhandler.CommandHandlersChain;
 import edu.java.bot.updatewrapper.UpdateWrapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class TelegramBotUpdateHandler {
-
-    private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdateListener.class);
 
     private final CommandHandlersChain commandHandlersChain;
 

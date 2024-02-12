@@ -7,12 +7,14 @@ import edu.java.bot.updatewrapper.UpdateWrapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class HelpCommandHandler extends CommandHandler {
     private Properties properties;
 
@@ -23,7 +25,7 @@ public class HelpCommandHandler extends CommandHandler {
                 StandardCharsets.UTF_8
             ));
         } catch (IOException e) {
-            logger.error("Файл info.properties не найден", e);
+            log.error("Файл info.properties не найден", e);
         }
         this.telegramBot = telegramBot;
         command = "/help";
@@ -34,7 +36,7 @@ public class HelpCommandHandler extends CommandHandler {
         if (update.getCommand().equals(command)) {
             telegramBot.execute(new SendMessage(update.getChatId(), properties.getProperty("help.message")).parseMode(
                 ParseMode.Markdown));
-            logger.info("Выдача меню помощи");
+            log.info("Выдача меню помощи");
             return true;
         }
         return handleNext(update);

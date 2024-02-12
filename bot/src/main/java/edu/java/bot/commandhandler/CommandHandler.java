@@ -1,14 +1,13 @@
 package edu.java.bot.commandhandler;
 
 import com.pengrad.telegrambot.TelegramBot;
-import edu.java.bot.listener.TelegramBotUpdateListener;
 import edu.java.bot.updatewrapper.UpdateWrapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class CommandHandler {
     private CommandHandler next;
-    protected final Logger logger = LoggerFactory.getLogger(TelegramBotUpdateListener.class);
+
     protected TelegramBot telegramBot;
     protected String command;
 

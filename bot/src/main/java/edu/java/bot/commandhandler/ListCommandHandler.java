@@ -5,9 +5,11 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.TempDB;
 import edu.java.bot.updatewrapper.UpdateWrapper;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class ListCommandHandler extends CommandHandler {
 
     private final TempDB tempDB;
@@ -23,7 +25,7 @@ public class ListCommandHandler extends CommandHandler {
         if (update.getCommand().equals(command)) {
             if (!tempDB.isEmpty()) {
                 telegramBot.execute(new SendMessage(update.getChatId(), buildListOfTrackedLinks()));
-                logger.info("Показываем список используемых ссылок");
+                log.info("Показываем список используемых ссылок");
                 return true;
             }
             telegramBot.execute(new SendMessage(update.getChatId(), "Отслеживаемых ссылок нет"));
