@@ -4,35 +4,37 @@ import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+@ExtendWith(MockitoExtension.class)
 class UpdateWrapperTest {
-    @Mock
-    private static UpdateWrapper updateWrapper;
+
+    private final static String TEXT = "/track https://stackoverflow.com/";
+
+    private UpdateWrapper updateWrapper;
 
     @Mock
-    private static Update update;
+    private Update update;
 
-    @BeforeAll
-    static void setUp() {
-        update = new Update();
-        Long id = 1L;
-        Chat chat = new Chat();
-        Message message = new Message();
-        String text = "/track https://stackoverflow.com/";
-        setField(chat, "id", id);
-        setField(message, "chat", chat);
-        setField(message, "text", text);
-        setField(update, "message", message);
-        updateWrapper = new UpdateWrapper(update);
-    }
+    @Mock
+    private Chat chat;
+
+    @Mock
+    private Message message;
 
     @Test
     void getChatId() {
+        Long id = 1L;
+        Mockito.when(chat.id()).thenReturn(id);
+        Mockito.when(message.chat()).thenReturn(chat);
+        Mockito.when(update.message()).thenReturn(message);
+        updateWrapper = new UpdateWrapper(update);
+
         Long expected = 1L;
 
         Long chatId = updateWrapper.getChatId();
@@ -42,6 +44,10 @@ class UpdateWrapperTest {
 
     @Test
     void getMessageText() {
+        Mockito.when(message.text()).thenReturn(TEXT);
+        Mockito.when(update.message()).thenReturn(message);
+        updateWrapper = new UpdateWrapper(update);
+
         String expected = "/track https://stackoverflow.com/";
 
         String messageText = updateWrapper.getMessageText();
@@ -51,6 +57,10 @@ class UpdateWrapperTest {
 
     @Test
     void getCommand() {
+        Mockito.when(message.text()).thenReturn(TEXT);
+        Mockito.when(update.message()).thenReturn(message);
+        updateWrapper = new UpdateWrapper(update);
+
         String expected = "/track";
 
         String command = updateWrapper.getCommand();
@@ -60,6 +70,10 @@ class UpdateWrapperTest {
 
     @Test
     void getURLFromMessage() {
+        Mockito.when(message.text()).thenReturn(TEXT);
+        Mockito.when(update.message()).thenReturn(message);
+        updateWrapper = new UpdateWrapper(update);
+
         String expected = "https://stackoverflow.com/";
 
         String urlFromMessage = updateWrapper.getURLFromMessage();
@@ -69,6 +83,10 @@ class UpdateWrapperTest {
 
     @Test
     void containsUrlInMessage() {
+        Mockito.when(message.text()).thenReturn(TEXT);
+        Mockito.when(update.message()).thenReturn(message);
+        updateWrapper = new UpdateWrapper(update);
+
         assertTrue(updateWrapper.containsUrlInMessage());
     }
 }

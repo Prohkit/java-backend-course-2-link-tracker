@@ -1,44 +1,39 @@
 package edu.java.bot.commandhandler;
 
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.Chat;
-import com.pengrad.telegrambot.model.Message;
-import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.TempDB;
 import edu.java.bot.updatewrapper.UpdateWrapper;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.util.ReflectionTestUtils.setField;
-
+@ExtendWith(MockitoExtension.class)
 class UntrackCommandHandlerTest {
 
+    private final static String COMMAND = "/untrack";
+
+    private final static String URL_FROM_MESSAGE = "https://stackoverflow.com/";
+
+    private final static boolean CONTAINS_URL_IN_MESSAGE = true;
+
+    @Mock
     private static UpdateWrapper updateWrapper;
-
-    private static UntrackCommandHandler untrackCommandHandler;
-
-    private static TempDB tempDB;
-
-    @BeforeAll
-    static void setUp() {
-        Update update = new Update();
-        tempDB = new TempDB();
-        TelegramBot telegramBot = new TelegramBot("token");
-        Long id = 1L;
-        Chat chat = new Chat();
-        Message message = new Message();
-        String text = "/untrack https://stackoverflow.com/";
-        setField(chat, "id", id);
-        setField(message, "text", text);
-        setField(message, "chat", chat);
-        setField(update, "message", message);
-        updateWrapper = new UpdateWrapper(update);
-        untrackCommandHandler = new UntrackCommandHandler(tempDB, telegramBot);
-    }
 
     @Test
     void handleCommandWhenLinkIsAlreadyInDB() {
+        Long id = 1L;
+        Mockito.when(updateWrapper.getChatId()).thenReturn(id);
+        Mockito.when(updateWrapper.getCommand()).thenReturn(COMMAND);
+        Mockito.when(updateWrapper.getURLFromMessage()).thenReturn(URL_FROM_MESSAGE);
+        Mockito.when(updateWrapper.containsUrlInMessage()).thenReturn(CONTAINS_URL_IN_MESSAGE);
+        TelegramBot telegramBot = new TelegramBot("token");
+        TempDB tempDB = new TempDB();
+        UntrackCommandHandler untrackCommandHandler = new UntrackCommandHandler(tempDB, telegramBot);
+
         tempDB.addResourceToDB("https://stackoverflow.com/");
         assertTrue(untrackCommandHandler.handleCommand(updateWrapper));
         tempDB.removeResourceFromDB("https://stackoverflow.com/");
@@ -46,6 +41,15 @@ class UntrackCommandHandlerTest {
 
     @Test
     void handleCommandWhenLinkIsNotInDB() {
+        Long id = 1L;
+        Mockito.when(updateWrapper.getChatId()).thenReturn(id);
+        Mockito.when(updateWrapper.getCommand()).thenReturn(COMMAND);
+        Mockito.when(updateWrapper.getURLFromMessage()).thenReturn(URL_FROM_MESSAGE);
+        Mockito.when(updateWrapper.containsUrlInMessage()).thenReturn(CONTAINS_URL_IN_MESSAGE);
+        TelegramBot telegramBot = new TelegramBot("token");
+        TempDB tempDB = new TempDB();
+        UntrackCommandHandler untrackCommandHandler = new UntrackCommandHandler(tempDB, telegramBot);
+
         assertFalse(untrackCommandHandler.handleCommand(updateWrapper));
     }
 }
