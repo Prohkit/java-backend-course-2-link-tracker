@@ -1,7 +1,6 @@
 package edu.java.bot.commandhandler;
 
-import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.bot.service.SendMessageService;
 import edu.java.bot.updatewrapper.UpdateWrapper;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -10,13 +9,14 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class CommandHandlersChain {
-    private final TelegramBot telegramBot;
 
     private final List<CommandHandler> handlerList;
 
-    public CommandHandlersChain(TelegramBot telegramBot, List<CommandHandler> handlerList) {
-        this.telegramBot = telegramBot;
+    private final SendMessageService messageService;
+
+    public CommandHandlersChain(List<CommandHandler> handlerList, SendMessageService messageService) {
         this.handlerList = handlerList;
+        this.messageService = messageService;
     }
 
     public void handleCommand(UpdateWrapper update) {
@@ -30,9 +30,8 @@ public class CommandHandlersChain {
         }
     }
 
-    public boolean handleUnknownCommand(UpdateWrapper update) {
-        telegramBot.execute(new SendMessage(update.getChatId(), "Неизвестная команда"));
+    private void handleUnknownCommand(UpdateWrapper update) {
+        messageService.sendMessage(update, "Неизвестная команда");
         log.info("Ничего не делаем");
-        return true;
     }
 }

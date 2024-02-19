@@ -1,8 +1,7 @@
 package edu.java.bot.commandhandler;
 
-import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.request.ParseMode;
-import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.bot.service.SendMessageService;
 import edu.java.bot.updatewrapper.UpdateWrapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class HelpCommandHandler extends CommandHandler {
     private Properties properties;
 
-    public HelpCommandHandler(TelegramBot telegramBot) {
+    public HelpCommandHandler(SendMessageService messageService) {
         try {
             properties = PropertiesLoaderUtils.loadProperties(new EncodedResource(
                 new ClassPathResource("info.properties"),
@@ -27,15 +26,14 @@ public class HelpCommandHandler extends CommandHandler {
         } catch (IOException e) {
             log.error("Файл info.properties не найден", e);
         }
-        this.telegramBot = telegramBot;
+        this.messageService = messageService;
         command = "/help";
     }
 
     @Override
     public boolean handleCommand(UpdateWrapper update) {
         if (update.getCommand().equals(command)) {
-            telegramBot.execute(new SendMessage(update.getChatId(), properties.getProperty("help.message")).parseMode(
-                ParseMode.Markdown));
+            messageService.sendMessage(update, properties.getProperty("help.message"), ParseMode.Markdown);
             log.info("Выдача меню помощи");
             return true;
         }
