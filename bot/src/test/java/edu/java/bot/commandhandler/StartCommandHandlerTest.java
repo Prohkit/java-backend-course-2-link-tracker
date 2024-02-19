@@ -1,30 +1,32 @@
 package edu.java.bot.commandhandler;
 
-import com.pengrad.telegrambot.TelegramBot;
+import edu.java.bot.service.SendMessageService;
 import edu.java.bot.updatewrapper.UpdateWrapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.springframework.beans.factory.annotation.Value;
 
 @ExtendWith(MockitoExtension.class)
 class StartCommandHandlerTest {
 
-    private final static String COMMAND = "/start";
+    private static final String COMMAND = "/start";
+
+    @Mock
+    private SendMessageService messageService;
 
     @Mock
     private UpdateWrapper updateWrapper;
 
     @Test
     void handleCommand() {
-        Long id = 1L;
-        Mockito.when(updateWrapper.getChatId()).thenReturn(id);
         Mockito.when(updateWrapper.getCommand()).thenReturn(COMMAND);
-        TelegramBot telegramBot = new TelegramBot("token");
-        StartCommandHandler startCommandHandler = new StartCommandHandler(telegramBot);
+        StartCommandHandler startCommandHandler = new StartCommandHandler(messageService);
 
-        assertTrue(startCommandHandler.handleCommand(updateWrapper));
+        startCommandHandler.handleCommand(updateWrapper);
+
+        Mockito.verify(messageService).sendMessage(updateWrapper, "Зарегистрирован новый пользователь");
     }
 }

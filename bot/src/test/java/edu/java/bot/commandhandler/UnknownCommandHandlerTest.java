@@ -1,24 +1,34 @@
 package edu.java.bot.commandhandler;
 
-import com.pengrad.telegrambot.TelegramBot;
+import edu.java.bot.service.SendMessageService;
 import edu.java.bot.updatewrapper.UpdateWrapper;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 class UnknownCommandHandlerTest {
+    @Mock
+    private UpdateWrapper updateWrapper;
 
     @Mock
-    private static UpdateWrapper updateWrapper;
+    private CommandHandlersChain commandHandlersChain;
+
+    @Mock
+    private SendMessageService messageService;
+
+    @Mock
+    private List<CommandHandler> handlerList;
 
     @Test
     void handleCommand() {
-        TelegramBot telegramBot = new TelegramBot("token");
-        UnknownCommandHandler unknownCommandHandler = new UnknownCommandHandler(telegramBot);
+        commandHandlersChain = new CommandHandlersChain(handlerList, messageService);
 
-        assertTrue(unknownCommandHandler.handleCommand(updateWrapper));
+        commandHandlersChain.handleCommand(updateWrapper);
+
+        Mockito.verify(messageService).sendMessage(updateWrapper, "Неизвестная команда");
     }
 }

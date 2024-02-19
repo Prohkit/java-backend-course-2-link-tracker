@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MockitoExtension.class)
 class UpdateWrapperTest {
 
-    private final static String TEXT = "/track https://stackoverflow.com/";
+    private static final String TEXT = "/track https://stackoverflow.com/";
 
     private UpdateWrapper updateWrapper;
 
