@@ -24,7 +24,7 @@ public class UntrackCommandHandler extends CommandHandler {
         if (update.getCommand().equals(command)) {
             return handleUntrackCommand(update);
         }
-        return handleNext(update);
+        return false;
     }
 
     private boolean handleUntrackCommand(UpdateWrapper update) {
@@ -38,6 +38,6 @@ public class UntrackCommandHandler extends CommandHandler {
             }
         }
         telegramBot.execute(new SendMessage(update.getChatId(), "Такая ссылка не отслеживается"));
-        return false;
+        return true;
     }
 }

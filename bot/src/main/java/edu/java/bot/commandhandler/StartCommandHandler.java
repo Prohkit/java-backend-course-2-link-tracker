@@ -21,6 +21,6 @@ public class StartCommandHandler extends CommandHandler {
             log.info("Запись нового пользователя в БД");
             return true;
         }
-        return handleNext(update);
+        return false;
     }
 }

@@ -16,6 +16,6 @@ public class TelegramBotUpdateHandler {
     }
 
     public void handle(UpdateWrapper update) {
-        commandHandlersChain.getCommandHandler().handleCommand(update);
+        commandHandlersChain.handleCommand(update);
     }
 }

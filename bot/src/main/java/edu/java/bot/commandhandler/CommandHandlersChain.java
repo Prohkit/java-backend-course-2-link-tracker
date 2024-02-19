@@ -1,58 +1,38 @@
 package edu.java.bot.commandhandler;
 
-import jakarta.annotation.PostConstruct;
-import org.springframework.stereotype.Component;
+import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.bot.updatewrapper.UpdateWrapper;
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
+@Slf4j
 public class CommandHandlersChain {
+    private final TelegramBot telegramBot;
 
-    private CommandHandler commandHandler;
+    private final List<CommandHandler> handlerList;
 
-    private final StartCommandHandler startCommandHandler;
-
-    private final ListCommandHandler listCommandHandler;
-
-    private final TrackCommandHandler trackCommandHandler;
-
-    private final UntrackCommandHandler untrackCommandHandler;
-
-    private final HelpCommandHandler helpCommandHandler;
-
-    private final UnknownCommandHandler unknownCommandHandler;
-
-    public CommandHandlersChain(
-        StartCommandHandler startCommandHandler,
-        ListCommandHandler listCommandHandler,
-        TrackCommandHandler trackCommandHandler,
-        UntrackCommandHandler untrackCommandHandler,
-        HelpCommandHandler helpCommandHandler,
-        UnknownCommandHandler unknownCommandHandler
-    ) {
-        this.startCommandHandler = startCommandHandler;
-        this.listCommandHandler = listCommandHandler;
-        this.trackCommandHandler = trackCommandHandler;
-        this.untrackCommandHandler = untrackCommandHandler;
-        this.helpCommandHandler = helpCommandHandler;
-        this.unknownCommandHandler = unknownCommandHandler;
+    public CommandHandlersChain(TelegramBot telegramBot, List<CommandHandler> handlerList) {
+        this.telegramBot = telegramBot;
+        this.handlerList = handlerList;
     }
 
-    @PostConstruct
-    void init() {
-        initChainCommandHanlders();
+    public void handleCommand(UpdateWrapper update) {
+        boolean isCommandHandled = handlerList.stream()
+            .map(handler -> handler.handleCommand(update))
+            .toList()
+            .contains(true);
+
+        if (!isCommandHandled) {
+            handleUnknownCommand(update);
+        }
     }
 
-    private void initChainCommandHanlders() {
-        commandHandler = CommandHandler.link(
-            startCommandHandler,
-            trackCommandHandler,
-            untrackCommandHandler,
-            helpCommandHandler,
-            listCommandHandler,
-            unknownCommandHandler
-        );
-    }
-
-    public CommandHandler getCommandHandler() {
-        return commandHandler;
+    public boolean handleUnknownCommand(UpdateWrapper update) {
+        telegramBot.execute(new SendMessage(update.getChatId(), "Неизвестная команда"));
+        log.info("Ничего не делаем");
+        return true;
     }
 }

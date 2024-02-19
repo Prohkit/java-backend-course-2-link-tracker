@@ -29,9 +29,9 @@ public class ListCommandHandler extends CommandHandler {
                 return true;
             }
             telegramBot.execute(new SendMessage(update.getChatId(), "Отслеживаемых ссылок нет"));
-            return false;
+            return true;
         }
-        return handleNext(update);
+        return false;
     }
 
     private String buildListOfTrackedLinks() {

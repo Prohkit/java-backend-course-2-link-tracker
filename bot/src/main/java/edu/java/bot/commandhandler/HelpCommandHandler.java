@@ -39,6 +39,6 @@ public class HelpCommandHandler extends CommandHandler {
             log.info("Выдача меню помощи");
             return true;
         }
-        return handleNext(update);
+        return false;
     }
 }

@@ -25,7 +25,7 @@ public class TrackCommandHandler extends CommandHandler {
         if (update.getCommand().equals(command)) {
             return handleTrackCommand(update);
         }
-        return handleNext(update);
+        return false;
     }
 
     private boolean handleTrackCommand(UpdateWrapper update) {
@@ -36,7 +36,7 @@ public class TrackCommandHandler extends CommandHandler {
             }
         }
         telegramBot.execute(new SendMessage(update.getChatId(), "Неверная ссылка"));
-        return false;
+        return true;
     }
 
     private boolean saveIfNotAlreadyTracked(String url, UpdateWrapper update) {
@@ -47,6 +47,6 @@ public class TrackCommandHandler extends CommandHandler {
             return true;
         }
         telegramBot.execute(new SendMessage(update.getChatId(), "Эта ссылка уже отслеживается"));
-        return false;
+        return true;
     }
 }
