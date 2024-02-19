@@ -5,14 +5,12 @@ import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class HttpClient {
-    private HttpClient next;
+public abstract class Client {
+    private Client next;
 
-    protected String clientHostName;
-
-    public static HttpClient link(HttpClient first, HttpClient... chain) {
-        HttpClient head = first;
-        for (HttpClient nextInChain : chain) {
+    public static Client link(Client first, Client... chain) {
+        Client head = first;
+        for (Client nextInChain : chain) {
             head.next = nextInChain;
             head = nextInChain;
         }

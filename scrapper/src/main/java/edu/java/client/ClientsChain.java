@@ -1,12 +1,14 @@
 package edu.java.client;
 
+import edu.java.client.impl.GithubClientImpl;
+import edu.java.client.impl.StackoverflowClientImpl;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ClientsChain {
 
-    private HttpClient client;
+    private Client client;
 
     private final GithubClientImpl githubClient;
 
@@ -23,13 +25,13 @@ public class ClientsChain {
     }
 
     private void initChainCommandHanlders() {
-        client = HttpClient.link(
+        client = Client.link(
             githubClient,
             stackoverflowClient
         );
     }
 
-    public HttpClient getClient() {
+    public Client getClient() {
         return client;
     }
 }
