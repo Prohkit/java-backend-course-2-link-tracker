@@ -10,17 +10,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class UntrackCommandHandler extends CommandHandler {
 
+    private static final String COMMAND = "/untrack";
+
     private final TempDB tempDB;
 
     public UntrackCommandHandler(TempDB tempDB, SendMessageService messageService) {
         this.tempDB = tempDB;
         this.messageService = messageService;
-        command = "/untrack";
     }
 
     @Override
     public boolean handleCommand(UpdateWrapper update) {
-        if (update.getCommand().equals(command)) {
+        if (update.getCommand().equals(COMMAND)) {
             return handleUntrackCommand(update);
         }
         return false;

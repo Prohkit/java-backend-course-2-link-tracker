@@ -11,17 +11,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ListCommandHandler extends CommandHandler {
 
+    private static final String COMMAND = "/list";
+
     private final TempDB tempDB;
 
     public ListCommandHandler(TempDB tempDB, SendMessageService messageService) {
         this.tempDB = tempDB;
         this.messageService = messageService;
-        command = "/list";
     }
 
     @Override
     public boolean handleCommand(UpdateWrapper update) {
-        if (update.getCommand().equals(command)) {
+        if (update.getCommand().equals(COMMAND)) {
             if (!tempDB.isEmpty()) {
                 messageService.sendMessage(update, buildListOfTrackedLinks());
                 log.info("Показываем список используемых ссылок");

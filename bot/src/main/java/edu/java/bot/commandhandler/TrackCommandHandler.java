@@ -11,17 +11,18 @@ import static edu.java.bot.util.Util.isUrlValid;
 @Slf4j
 public class TrackCommandHandler extends CommandHandler {
 
+    private static final String COMMAND = "/track";
+
     private final TempDB tempDB;
 
     public TrackCommandHandler(TempDB tempDB, SendMessageService messageService) {
         this.tempDB = tempDB;
         this.messageService = messageService;
-        command = "/track";
     }
 
     @Override
     public boolean handleCommand(UpdateWrapper update) {
-        if (update.getCommand().equals(command)) {
+        if (update.getCommand().equals(COMMAND)) {
             return handleTrackCommand(update);
         }
         return false;

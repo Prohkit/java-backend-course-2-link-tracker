@@ -9,7 +9,5 @@ public abstract class CommandHandler {
 
     protected SendMessageService messageService;
 
-    protected String command;
-
     public abstract boolean handleCommand(UpdateWrapper update);
 }

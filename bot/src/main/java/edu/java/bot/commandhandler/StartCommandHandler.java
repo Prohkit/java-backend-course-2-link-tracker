@@ -8,14 +8,16 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class StartCommandHandler extends CommandHandler {
+
+    private static final String COMMAND = "/start";
+
     public StartCommandHandler(SendMessageService messageService) {
         this.messageService = messageService;
-        command = "/start";
     }
 
     @Override
     public boolean handleCommand(UpdateWrapper update) {
-        if (update.getCommand().equals(command)) {
+        if (update.getCommand().equals(COMMAND)) {
             messageService.sendMessage(update, "Зарегистрирован новый пользователь");
             log.info("Запись нового пользователя в БД");
             return true;

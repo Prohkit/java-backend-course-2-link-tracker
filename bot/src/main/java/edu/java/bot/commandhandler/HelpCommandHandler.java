@@ -15,6 +15,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class HelpCommandHandler extends CommandHandler {
+
+    private static final String COMMAND = "/help";
+
     private Properties properties;
 
     public HelpCommandHandler(SendMessageService messageService) {
@@ -27,12 +30,11 @@ public class HelpCommandHandler extends CommandHandler {
             log.error("Файл info.properties не найден", e);
         }
         this.messageService = messageService;
-        command = "/help";
     }
 
     @Override
     public boolean handleCommand(UpdateWrapper update) {
-        if (update.getCommand().equals(command)) {
+        if (update.getCommand().equals(COMMAND)) {
             messageService.sendMessage(update, properties.getProperty("help.message"), ParseMode.Markdown);
             log.info("Выдача меню помощи");
             return true;
