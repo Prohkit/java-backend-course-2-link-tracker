@@ -29,7 +29,10 @@ class ListCommandHandlerTest {
         listCommandHandler.handleCommand(updateWrapper);
 
         Mockito.verify(messageService)
-            .sendMessage(updateWrapper, "Список отслеживаемых ссылок: \r\nhttps://stackoverflow.com/\r\n");
+            .sendMessage(updateWrapper, "Список отслеживаемых ссылок: "
+                + System.lineSeparator()
+                + "https://stackoverflow.com/"
+                + System.lineSeparator());
         tempDB.removeResourceFromDB("https://stackoverflow.com/");
     }
 
