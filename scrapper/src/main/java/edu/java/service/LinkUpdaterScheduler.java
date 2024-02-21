@@ -1,6 +1,5 @@
 package edu.java.service;
 
-import edu.java.client.Client;
 import edu.java.client.ClientsChain;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,8 +17,7 @@ public class LinkUpdaterScheduler {
 
     @Scheduled(fixedDelayString = "#{@scheduler.interval}")
     public void update() {
-        Client client = chain.getClient();
-        client.getUpdateInfo("https://stackoverflow.com/questions/1642028/what-is-the-operator-in-c-c");
+        chain.getUpdateInfo("https://stackoverflow.com/questions/1642028/what-is-the-operator-in-c-c");
         log.info("start update");
     }
 }

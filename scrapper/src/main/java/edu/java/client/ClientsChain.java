@@ -1,37 +1,18 @@
 package edu.java.client;
 
-import edu.java.client.impl.GithubClientImpl;
-import edu.java.client.impl.StackoverflowClientImpl;
-import jakarta.annotation.PostConstruct;
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ClientsChain {
 
-    private Client client;
+    private final List<Client> clientList;
 
-    private final GithubClientImpl githubClient;
-
-    private final StackoverflowClientImpl stackoverflowClient;
-
-    public ClientsChain(GithubClientImpl githubClient, StackoverflowClientImpl stackoverflowClient) {
-        this.githubClient = githubClient;
-        this.stackoverflowClient = stackoverflowClient;
+    public ClientsChain(List<Client> clientList) {
+        this.clientList = clientList;
     }
 
-    @PostConstruct
-    void init() {
-        initChainCommandHanlders();
-    }
-
-    private void initChainCommandHanlders() {
-        client = Client.link(
-            githubClient,
-            stackoverflowClient
-        );
-    }
-
-    public Client getClient() {
-        return client;
+    public void getUpdateInfo(String url) {
+        clientList.forEach(client -> client.getUpdateInfo(url));
     }
 }

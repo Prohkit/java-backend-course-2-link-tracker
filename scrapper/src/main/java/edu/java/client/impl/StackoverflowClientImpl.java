@@ -15,10 +15,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class StackoverflowClientImpl extends Client implements StackoverflowClient {
 
     @Value("${url.site.stackoverflow}")
-    private String clientHostName;
+    private static String clientHostName;
 
     @Value("${url.api.stackoverflow}")
-    private String apiUrl;
+    private static String apiUrl;
 
     @Override
     public QuestionResponse fetchQuestion(Long questionId) {
@@ -41,7 +41,7 @@ public class StackoverflowClientImpl extends Client implements StackoverflowClie
             }
             return true;
         }
-        return handleNext(url);
+        return true;
     }
 
     private Matcher getQuestionByIdMatcher(String url) {

@@ -6,25 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class Client {
-    private Client next;
-
-    public static Client link(Client first, Client... chain) {
-        Client head = first;
-        for (Client nextInChain : chain) {
-            head.next = nextInChain;
-            head = nextInChain;
-        }
-        return first;
-    }
 
     public abstract boolean getUpdateInfo(String url);
-
-    protected boolean handleNext(String url) {
-        if (next == null) {
-            return true;
-        }
-        return next.getUpdateInfo(url);
-    }
 
     protected String getHostName(String url) {
         Pattern pattern = Pattern.compile("^(?:https?:\\/\\/)?(?:[^@\\n]+@)?(?:www\\.)?(?<hostName>[^:/\\n?]+)");

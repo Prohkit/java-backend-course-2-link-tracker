@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 public class GithubClientImpl extends Client implements GithubClient {
 
     @Value("${url.site.github}")
-    private String clientHostName;
+    private static String clientHostName;
 
     @Value("${url.api.github}")
-    private String apiUrl;
+    private static String apiUrl;
 
     @Override
     public RepositoryResponse fetchRepository(String repositoryName) {
@@ -22,6 +22,6 @@ public class GithubClientImpl extends Client implements GithubClient {
 
     @Override
     public boolean getUpdateInfo(String url) {
-        return handleNext(url);
+        return true;
     }
 }
