@@ -17,7 +17,8 @@ public class LinkUpdaterScheduler {
 
     @Scheduled(fixedDelayString = "#{@scheduler.interval}")
     public void update() {
-        chain.getUpdateInfo("https://stackoverflow.com/questions/1642028/what-is-the-operator-in-c-c");
+        //chain.getUpdateInfo("https://stackoverflow.com/questions/1642028/what-is-the-operator-in-c-c");
+        //chain.getUpdateInfo("https://github.com/Prohkit/java-backend-course-2-link-tracker");
         log.info("start update");
     }
 }
