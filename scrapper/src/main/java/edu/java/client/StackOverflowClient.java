@@ -2,6 +2,6 @@ package edu.java.client;
 
 import edu.java.response.QuestionResponse;
 
-public interface StackoverflowClient {
+public interface StackOverflowClient {
     QuestionResponse fetchQuestion(Long questionId);
 }

@@ -1,19 +1,22 @@
 package edu.java.configuration;
 
-import edu.java.client.GithubClient;
-import edu.java.client.StackoverflowClient;
 import edu.java.client.impl.GithubClientImpl;
-import edu.java.client.impl.StackoverflowClientImpl;
+import edu.java.client.impl.StackOverflowClientImpl;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class ClientConfiguration {
-    @Bean GithubClient githubClient() {
-        return new GithubClientImpl();
+
+    @Bean
+    public GithubClientImpl githubClient(@Value("https://api.github.com/") String baseUrl) {
+        return new GithubClientImpl(WebClient.builder().baseUrl(baseUrl).build());
     }
 
-    @Bean StackoverflowClient stackoverflowClient() {
-        return new StackoverflowClientImpl();
+    @Bean
+    public StackOverflowClientImpl stackOverflowClient(@Value("https://api.stackexchange.com/2.3/") String baseUrl) {
+        return new StackOverflowClientImpl(WebClient.builder().baseUrl(baseUrl).build());
     }
 }

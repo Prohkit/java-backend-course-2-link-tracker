@@ -1,31 +1,29 @@
 package edu.java.client.impl;
 
 import edu.java.client.Client;
-import edu.java.client.StackoverflowClient;
+import edu.java.client.StackOverflowClient;
 import edu.java.response.QuestionResponse;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@Component
 @Slf4j
-public class StackoverflowClientImpl extends Client implements StackoverflowClient {
+public class StackOverflowClientImpl extends Client implements StackOverflowClient {
 
-    @Value("${url.site.stackoverflow}")
-    private static String clientHostName;
+    private final WebClient webClient;
 
-    @Value("${url.api.stackoverflow}")
-    private static String apiUrl;
+    private static final String SITE_NAME = "stackoverflow.com";
+
+    public StackOverflowClientImpl(WebClient webClient) {
+        this.webClient = webClient;
+    }
 
     @Override
     public QuestionResponse fetchQuestion(Long questionId) {
-        WebClient client = WebClient.create(apiUrl);
-        return client
+        return webClient
             .get()
-            .uri("questions/" + questionId + "/?site=stackoverflow&filter=withbody")
+            .uri("questions/{questionId}/?site=stackoverflow&filter=withbody", questionId)
             .retrieve()
             .bodyToMono(QuestionResponse.class)
             .block();
@@ -34,10 +32,10 @@ public class StackoverflowClientImpl extends Client implements StackoverflowClie
     @Override
     public boolean getUpdateInfo(String url) {
         String hostName = getHostName(url);
-        if (!hostName.isEmpty() && hostName.equals(clientHostName)) {
+        if (hostName.equals(SITE_NAME)) {
             if (isQuestionByIdEndpoint(url)) {
                 Long questionId = getQuestionId(url);
-                fetchQuestion(questionId);
+                QuestionResponse response = fetchQuestion(questionId);
             }
             return true;
         }
