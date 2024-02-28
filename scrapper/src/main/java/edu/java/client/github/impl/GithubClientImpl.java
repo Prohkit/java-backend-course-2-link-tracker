@@ -1,8 +1,8 @@
-package edu.java.client.impl;
+package edu.java.client.github.impl;
 
 import edu.java.client.Client;
-import edu.java.client.GithubClient;
-import edu.java.response.RepositoryResponse;
+import edu.java.client.github.GithubClient;
+import edu.java.client.github.dto.RepositoryResponse;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;

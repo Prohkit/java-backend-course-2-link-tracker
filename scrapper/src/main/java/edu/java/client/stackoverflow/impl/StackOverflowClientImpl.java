@@ -1,8 +1,8 @@
-package edu.java.client.impl;
+package edu.java.client.stackoverflow.impl;
 
 import edu.java.client.Client;
-import edu.java.client.StackOverflowClient;
-import edu.java.response.QuestionResponse;
+import edu.java.client.stackoverflow.StackOverflowClient;
+import edu.java.client.stackoverflow.dto.QuestionResponse;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
