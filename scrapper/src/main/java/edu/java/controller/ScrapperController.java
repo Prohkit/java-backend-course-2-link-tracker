@@ -1,9 +1,13 @@
 package edu.java.controller;
 
-import edu.java.dto.AddLinkRequest;
-import edu.java.dto.LinkResponse;
-import edu.java.dto.ListLinksResponse;
-import edu.java.dto.RemoveLinkRequest;
+import edu.java.dto.scrapper.request.AddLinkRequest;
+import edu.java.dto.scrapper.request.RemoveLinkRequest;
+import edu.java.dto.scrapper.response.LinkResponse;
+import edu.java.dto.scrapper.response.ListLinksResponse;
+import edu.java.exception.ChatAlreadyRegisteredException;
+import edu.java.exception.ChatDoesNotExistException;
+import edu.java.exception.LinkHasAlreadyBeenAddedException;
+import edu.java.exception.LinkNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,23 +22,36 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
+@SuppressWarnings("MultipleStringLiterals")
 public class ScrapperController {
 
     @PostMapping("/tg-chat/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void registerChat(@PathVariable Long id) {
         log.info("Регистрация чата с идентификатором {}", id);
+        boolean isChatExist = false;
+        if (isChatExist) {
+            throw new ChatAlreadyRegisteredException("Чат уже зарегистрирован");
+        }
     }
 
     @DeleteMapping("/tg-chat/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteChat(@PathVariable Long id) {
         log.info("Удаление чата с идентификатором {}", id);
+        boolean isChatExist = false;
+        if (isChatExist) {
+            throw new ChatDoesNotExistException("Чат не найден");
+        }
     }
 
     @GetMapping("/links")
     public ResponseEntity<ListLinksResponse> getAllTrackedLinks(@RequestHeader(name = "Tg-Chat-Id") Long tgChatId) {
         log.info("Получение ссылок по идентификатору чата {}", tgChatId);
+        boolean isChatExist = false;
+        if (isChatExist) {
+            throw new ChatDoesNotExistException("Чат не найден");
+        }
         return new ResponseEntity<>(new ListLinksResponse(), HttpStatus.OK);
     }
 
@@ -44,6 +61,14 @@ public class ScrapperController {
         @RequestBody AddLinkRequest linkRequest
     ) {
         log.info("Добавление ссылки {} по идентификатору чата {}", linkRequest.getLink(), tgChatId);
+        boolean isChatExist = false;
+        if (isChatExist) {
+            throw new ChatDoesNotExistException("Чат не найден");
+        }
+        boolean hasLinkAlreadyBeenAdded = false;
+        if (hasLinkAlreadyBeenAdded) {
+            throw new LinkHasAlreadyBeenAddedException("Ссылка уже добавлена");
+        }
         return new ResponseEntity<>(new LinkResponse(), HttpStatus.OK);
     }
 
@@ -53,6 +78,14 @@ public class ScrapperController {
         @RequestBody RemoveLinkRequest linkRequest
     ) {
         log.info("Удаление ссылки {} по идентификатору чата {}", linkRequest.getLink(), tgChatId);
+        boolean isChatExist = false;
+        if (isChatExist) {
+            throw new ChatDoesNotExistException("Чат не найден");
+        }
+        boolean isLinkExist = false;
+        if (isLinkExist) {
+            throw new LinkNotFoundException("Ссылка не найдена");
+        }
         return new ResponseEntity<>(new LinkResponse(), HttpStatus.OK);
     }
 }
