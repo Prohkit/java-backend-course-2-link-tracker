@@ -1,7 +1,9 @@
 package edu.java.exception.handler;
 
 import edu.java.exception.BadRequestException;
+import edu.java.exception.ChatAlreadyRegisteredException;
 import edu.java.exception.ChatDoesNotExistException;
+import edu.java.exception.LinkHasAlreadyBeenAddedException;
 import edu.java.exception.LinkNotFoundException;
 import java.util.Arrays;
 import org.springframework.http.HttpStatus;
@@ -33,34 +35,59 @@ public class ApiExceptionHandler {
             .body(getLinkNotFoundExceptionResponse(exception));
     }
 
+    @ExceptionHandler(ChatAlreadyRegisteredException.class)
+    public ResponseEntity<ApiErrorResponse> chatAlreadyRegisteredException(ChatAlreadyRegisteredException exception) {
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(getChatAlreadyRegisteredExceptionResponse(exception));
+    }
+
+    @ExceptionHandler(LinkHasAlreadyBeenAddedException.class)
+    public ResponseEntity<ApiErrorResponse> linkHasAlreadyBeenAddedException(
+        LinkHasAlreadyBeenAddedException exception
+    ) {
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(getLinkHasAlreadyBeenAddedExceptionResponse(exception));
+    }
+
+    private ApiErrorResponse getLinkHasAlreadyBeenAddedExceptionResponse(Exception exception) {
+        ApiErrorResponse errorResponse = getApiErrorResponse(exception);
+        errorResponse.setDescription("Ссылка уже добавлена");
+        errorResponse.setCode(String.valueOf(HttpStatus.BAD_REQUEST));
+        return errorResponse;
+    }
+
+    private ApiErrorResponse getChatAlreadyRegisteredExceptionResponse(Exception exception) {
+        ApiErrorResponse errorResponse = getApiErrorResponse(exception);
+        errorResponse.setDescription("Чат уже зарегистрирован");
+        errorResponse.setCode(String.valueOf(HttpStatus.BAD_REQUEST));
+        return errorResponse;
+    }
+
     private ApiErrorResponse getBadRequestExceptionResponse(Exception exception) {
-        return ApiErrorResponse.builder()
-            .description("Некорректные параметры запроса")
-            .code(String.valueOf(HttpStatus.BAD_REQUEST))
-            .exceptionName(exception.getClass().getName())
-            .exceptionMessage(exception.getMessage())
-            .stacktrace(Arrays.stream(exception.getStackTrace())
-                .map(StackTraceElement::toString)
-                .toList())
-            .build();
+        ApiErrorResponse errorResponse = getApiErrorResponse(exception);
+        errorResponse.setDescription("Некорректные параметры запроса");
+        errorResponse.setCode(String.valueOf(HttpStatus.BAD_REQUEST));
+        return errorResponse;
     }
 
     private ApiErrorResponse getChatDoesNotExistExceptionResponse(Exception exception) {
-        return ApiErrorResponse.builder()
-            .description("Чат не существует")
-            .code(String.valueOf(HttpStatus.NOT_FOUND))
-            .exceptionName(exception.getClass().getName())
-            .exceptionMessage(exception.getMessage())
-            .stacktrace(Arrays.stream(exception.getStackTrace())
-                .map(StackTraceElement::toString)
-                .toList())
-            .build();
+        ApiErrorResponse errorResponse = getApiErrorResponse(exception);
+        errorResponse.setDescription("Чат не найден");
+        errorResponse.setCode(String.valueOf(HttpStatus.NOT_FOUND));
+        return errorResponse;
     }
 
     private ApiErrorResponse getLinkNotFoundExceptionResponse(Exception exception) {
+        ApiErrorResponse errorResponse = getApiErrorResponse(exception);
+        errorResponse.setDescription("Ссылка не найдена");
+        errorResponse.setCode(String.valueOf(HttpStatus.NOT_FOUND));
+        return errorResponse;
+    }
+
+    private ApiErrorResponse getApiErrorResponse(Exception exception) {
         return ApiErrorResponse.builder()
-            .description("Ссылка не найдена")
-            .code(String.valueOf(HttpStatus.NOT_FOUND))
             .exceptionName(exception.getClass().getName())
             .exceptionMessage(exception.getMessage())
             .stacktrace(Arrays.stream(exception.getStackTrace())
