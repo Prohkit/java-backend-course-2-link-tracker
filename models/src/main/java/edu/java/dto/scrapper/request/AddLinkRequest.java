@@ -1,4 +1,4 @@
-package edu.java.dto;
+package edu.java.dto.scrapper.request;
 
 import lombok.Data;
 
