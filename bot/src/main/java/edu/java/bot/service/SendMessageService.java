@@ -3,6 +3,7 @@ package edu.java.bot.service;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.bot.exception.handler.ApiErrorResponse;
 import edu.java.bot.updatewrapper.UpdateWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,5 +23,9 @@ public class SendMessageService {
 
     public void sendMessage(UpdateWrapper update, String text, ParseMode parseMode) {
         telegramBot.execute(new SendMessage(update.getChatId(), text).parseMode(parseMode));
+    }
+
+    public void sendApiError(Long tgChatId, ApiErrorResponse apiErrorResponse) {
+        telegramBot.execute(new SendMessage(tgChatId, apiErrorResponse.getExceptionMessage()));
     }
 }
