@@ -8,9 +8,9 @@ import edu.java.dto.scrapper.response.LinkResponse;
 import edu.java.dto.scrapper.response.ListLinksResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -30,16 +30,9 @@ public class ScrapperClient {
             .post()
             .uri("/tg-chat/" + id)
             .retrieve()
-            .onStatus(
-                HttpStatusCode::isError,
-                clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
-                    .handle(((apiErrorResponse, throwableSynchronousSink) -> {
-                        service.sendApiError(id, apiErrorResponse);
-                        log.error("ChatId: {} Message: {}", id, apiErrorResponse.getExceptionMessage());
-                    }
-                    ))
-            )
             .toEntity(Void.class)
+            .doOnError(WebClientResponseException.class, exception -> handleError(id, exception))
+            .onErrorComplete()
             .block();
     }
 
@@ -48,16 +41,9 @@ public class ScrapperClient {
             .delete()
             .uri("/tg-chat/" + id)
             .retrieve()
-            .onStatus(
-                HttpStatusCode::isError,
-                clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
-                    .handle(((apiErrorResponse, throwableSynchronousSink) -> {
-                        service.sendApiError(id, apiErrorResponse);
-                        log.error("ChatId: {} Message: {}", id, apiErrorResponse.getExceptionMessage());
-                    }
-                    ))
-            )
             .toEntity(Void.class)
+            .doOnError(WebClientResponseException.class, exception -> handleError(id, exception))
+            .onErrorComplete()
             .block();
     }
 
@@ -67,16 +53,9 @@ public class ScrapperClient {
             .uri("/links")
             .header("Tg-Chat-Id", String.valueOf(tgChatId))
             .retrieve()
-            .onStatus(
-                HttpStatusCode::isError,
-                clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
-                    .handle(((apiErrorResponse, throwableSynchronousSink) -> {
-                        service.sendApiError(tgChatId, apiErrorResponse);
-                        log.error("ChatId: {} Message: {}", tgChatId, apiErrorResponse.getExceptionMessage());
-                    }
-                    ))
-            )
             .toEntity(ListLinksResponse.class)
+            .doOnError(WebClientResponseException.class, exception -> handleError(tgChatId, exception))
+            .onErrorComplete()
             .block();
     }
 
@@ -87,16 +66,9 @@ public class ScrapperClient {
             .header("Tg-Chat-Id", String.valueOf(tgChatId))
             .bodyValue(linkRequest)
             .retrieve()
-            .onStatus(
-                HttpStatusCode::isError,
-                clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
-                    .handle(((apiErrorResponse, throwableSynchronousSink) -> {
-                        service.sendApiError(tgChatId, apiErrorResponse);
-                        log.error("ChatId: {} Message: {}", tgChatId, apiErrorResponse.getExceptionMessage());
-                    }
-                    ))
-            )
             .toEntity(LinkResponse.class)
+            .doOnError(WebClientResponseException.class, exception -> handleError(tgChatId, exception))
+            .onErrorComplete()
             .block();
     }
 
@@ -107,16 +79,15 @@ public class ScrapperClient {
             .header("Tg-Chat-Id", String.valueOf(tgChatId))
             .body(Mono.just(linkRequest), RemoveLinkRequest.class)
             .retrieve()
-            .onStatus(
-                HttpStatusCode::isError,
-                clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
-                    .handle(((apiErrorResponse, throwableSynchronousSink) -> {
-                        service.sendApiError(tgChatId, apiErrorResponse);
-                        log.error("ChatId: {} Message: {}", tgChatId, apiErrorResponse.getExceptionMessage());
-                    }
-                    ))
-            )
             .toEntity(Void.class)
+            .doOnError(WebClientResponseException.class, exception -> handleError(tgChatId, exception))
+            .onErrorComplete()
             .block();
+    }
+
+    private void handleError(Long id, WebClientResponseException exception) {
+        ApiErrorResponse apiErrorResponse = exception.getResponseBodyAs(ApiErrorResponse.class);
+        service.sendApiError(id, apiErrorResponse);
+        log.error("ChatId: {} Message: {}", id, apiErrorResponse.getExceptionMessage());
     }
 }
