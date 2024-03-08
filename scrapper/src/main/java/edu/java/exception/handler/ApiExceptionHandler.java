@@ -52,42 +52,29 @@ public class ApiExceptionHandler {
     }
 
     private ApiErrorResponse getLinkHasAlreadyBeenAddedExceptionResponse(Exception exception) {
-        ApiErrorResponse errorResponse = getApiErrorResponse(exception);
-        errorResponse.setDescription("Ссылка уже добавлена");
-        errorResponse.setCode(String.valueOf(HttpStatus.BAD_REQUEST));
-        return errorResponse;
+        return getApiErrorResponse("Ссылка уже добавлена", HttpStatus.BAD_REQUEST, exception);
     }
 
     private ApiErrorResponse getChatAlreadyRegisteredExceptionResponse(Exception exception) {
-        ApiErrorResponse errorResponse = getApiErrorResponse(exception);
-        errorResponse.setDescription("Чат уже зарегистрирован");
-        errorResponse.setCode(String.valueOf(HttpStatus.BAD_REQUEST));
-        return errorResponse;
+        return getApiErrorResponse("Чат уже зарегистрирован", HttpStatus.BAD_REQUEST, exception);
     }
 
     private ApiErrorResponse getBadRequestExceptionResponse(Exception exception) {
-        ApiErrorResponse errorResponse = getApiErrorResponse(exception);
-        errorResponse.setDescription("Некорректные параметры запроса");
-        errorResponse.setCode(String.valueOf(HttpStatus.BAD_REQUEST));
-        return errorResponse;
+        return getApiErrorResponse("Некорректные параметры запроса", HttpStatus.BAD_REQUEST, exception);
     }
 
     private ApiErrorResponse getChatDoesNotExistExceptionResponse(Exception exception) {
-        ApiErrorResponse errorResponse = getApiErrorResponse(exception);
-        errorResponse.setDescription("Чат не найден");
-        errorResponse.setCode(String.valueOf(HttpStatus.NOT_FOUND));
-        return errorResponse;
+        return getApiErrorResponse("Чат не найден", HttpStatus.NOT_FOUND, exception);
     }
 
     private ApiErrorResponse getLinkNotFoundExceptionResponse(Exception exception) {
-        ApiErrorResponse errorResponse = getApiErrorResponse(exception);
-        errorResponse.setDescription("Ссылка не найдена");
-        errorResponse.setCode(String.valueOf(HttpStatus.NOT_FOUND));
-        return errorResponse;
+        return getApiErrorResponse("Ссылка не найдена", HttpStatus.NOT_FOUND, exception);
     }
 
-    private ApiErrorResponse getApiErrorResponse(Exception exception) {
+    private ApiErrorResponse getApiErrorResponse(String description, HttpStatus status, Exception exception) {
         return ApiErrorResponse.builder()
+            .description(description)
+            .code(String.valueOf(status))
             .exceptionName(exception.getClass().getName())
             .exceptionMessage(exception.getMessage())
             .stacktrace(Arrays.stream(exception.getStackTrace())
