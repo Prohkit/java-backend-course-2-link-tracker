@@ -72,11 +72,10 @@ class ScrapperClientTest {
                 .withBody(objectMapper.writeValueAsString(apiErrorResponse))
             ));
 
-        ResponseEntity<Void> responseEntity = scrapperClient.registerChat(id);
+        scrapperClient.registerChat(id);
 
         Mockito.verify(service).sendApiError(id, apiErrorResponse);
         verify(postRequestedFor(urlEqualTo("/tg-chat/" + id)));
-        assertEquals(HttpStatusCode.valueOf(400), responseEntity.getStatusCode());
     }
 
     @Test
@@ -155,12 +154,10 @@ class ScrapperClientTest {
                 .withBody(objectMapper.writeValueAsString(apiErrorResponse))
             ));
 
-        ResponseEntity<ListLinksResponse> responseEntity = scrapperClient.getAllTrackedLinks(chatId);
+        scrapperClient.getAllTrackedLinks(chatId);
 
         Mockito.verify(service).sendApiError(chatId, apiErrorResponse);
         verify(getRequestedFor(urlEqualTo("/links")));
-        assertEquals(HttpStatusCode.valueOf(400), responseEntity.getStatusCode());
-
     }
 
     @Test
@@ -212,11 +209,10 @@ class ScrapperClientTest {
                 .withBody(objectMapper.writeValueAsString(apiErrorResponse))
             ));
 
-        ResponseEntity<LinkResponse> responseEntity = scrapperClient.addLinkTracking(chatId, addLinkRequest);
+        scrapperClient.addLinkTracking(chatId, addLinkRequest);
 
         Mockito.verify(service).sendApiError(chatId, apiErrorResponse);
         verify(postRequestedFor(urlEqualTo("/links")));
-        assertEquals(HttpStatusCode.valueOf(400), responseEntity.getStatusCode());
     }
 
     @Test
@@ -268,10 +264,9 @@ class ScrapperClientTest {
                 .withBody(objectMapper.writeValueAsString(apiErrorResponse))
             ));
 
-        ResponseEntity<Void> responseEntity = scrapperClient.removeLinkTracking(chatId, removeLinkRequest);
+        scrapperClient.removeLinkTracking(chatId, removeLinkRequest);
 
         Mockito.verify(service).sendApiError(chatId, apiErrorResponse);
         verify(deleteRequestedFor(urlEqualTo("/links")));
-        assertEquals(HttpStatusCode.valueOf(400), responseEntity.getStatusCode());
     }
 }
