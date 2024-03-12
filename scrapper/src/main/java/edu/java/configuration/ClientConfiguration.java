@@ -1,7 +1,8 @@
 package edu.java.configuration;
 
-import edu.java.client.impl.GithubClientImpl;
-import edu.java.client.impl.StackOverflowClientImpl;
+import edu.java.client.BotClient;
+import edu.java.client.github.impl.GithubClientImpl;
+import edu.java.client.stackoverflow.impl.StackOverflowClientImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,5 +19,10 @@ public class ClientConfiguration {
     @Bean
     public StackOverflowClientImpl stackOverflowClient(@Value("https://api.stackexchange.com/2.3/") String baseUrl) {
         return new StackOverflowClientImpl(WebClient.builder().baseUrl(baseUrl).build());
+    }
+
+    @Bean
+    public BotClient botClient(@Value("http://localhost:8090") String baseUrl) {
+        return new BotClient(WebClient.builder().baseUrl(baseUrl).build());
     }
 }
