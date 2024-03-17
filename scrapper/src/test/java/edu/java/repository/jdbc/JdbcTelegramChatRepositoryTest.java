@@ -2,6 +2,7 @@ package edu.java.repository.jdbc;
 
 import edu.java.domain.Chat;
 import edu.java.repository.TelegramChatRepository;
+import edu.java.scrapper.IntegrationTest;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-class JdbcTelegramChatRepositoryTest {
+class JdbcTelegramChatRepositoryTest extends IntegrationTest {
 
     @Autowired
     private TelegramChatRepository chatRepository;

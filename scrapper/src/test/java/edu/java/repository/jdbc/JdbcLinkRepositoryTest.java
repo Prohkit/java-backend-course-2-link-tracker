@@ -2,6 +2,7 @@ package edu.java.repository.jdbc;
 
 import edu.java.domain.Link;
 import edu.java.repository.LinkRepository;
+import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-class JdbcLinkRepositoryTest {
+class JdbcLinkRepositoryTest extends IntegrationTest {
     @Autowired
     private LinkRepository linkRepository;
 
