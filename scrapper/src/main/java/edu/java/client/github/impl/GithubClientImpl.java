@@ -52,13 +52,16 @@ public class GithubClientImpl extends Client implements GithubClient {
 
     private String handleRepositoryResponse(Link link, RepositoryResponse response) {
         if (response.updatedAt().isAfter(link.getLastModifiedTime())) {
+            StringBuilder stringBuilder = new StringBuilder("Есть обновление ")
+                .append(link.getUrl().toString()).append(System.lineSeparator());
             link.setLastModifiedTime(response.updatedAt());
             GithubRepository repoFromDB = githubService.getGithubRepositoryByLinkId(link.getId());
             if (!repoFromDB.getForksCount().equals(response.forksCount())) {
-                return "Изменилось количество форков репозитория " + link.getUrl().toString() + ". Было "
-                    + repoFromDB.getForksCount() + ", стало " + response.forksCount() + ".";
+                stringBuilder.append("Изменилось количество форков репозитория, было ")
+                    .append(repoFromDB.getForksCount()).append(", стало ").append(response.forksCount())
+                    .append(".").append(System.lineSeparator());
             }
-            return "Есть обновление " + link.getUrl().toString();
+            return new String(stringBuilder);
         }
         return null;
     }
