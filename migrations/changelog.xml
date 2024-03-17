@@ -7,4 +7,8 @@
     <changeSet id="init_tables" author="Prohkit">
         <sqlFile path="sql/init_tables.sql" relativeToChangelogFile="true"/>
     </changeSet>
+
+    <changeSet id="link_add_columns" author="Prohkit">
+        <sqlFile path="sql/link_add_columns.sql"/>
+    </changeSet>
 </databaseChangeLog>
