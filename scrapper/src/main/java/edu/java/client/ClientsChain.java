@@ -1,5 +1,6 @@
 package edu.java.client;
 
+import edu.java.domain.Link;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,14 @@ public class ClientsChain {
         this.clientList = clientList;
     }
 
-    public void getUpdateInfo(String url) {
-        clientList.forEach(client -> client.getUpdateInfo(url));
+    public String getUpdateInfo(Link link) {
+        String description = null;
+        for (Client client : clientList) {
+            description = client.getUpdateInfo(link);
+            if (description != null) {
+                break;
+            }
+        }
+        return description;
     }
 }
