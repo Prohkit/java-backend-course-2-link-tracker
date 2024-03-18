@@ -1,9 +1,9 @@
 package edu.java.client.impl;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import edu.java.client.github.dto.RepositoryResponse;
 import edu.java.client.github.impl.GithubClientImpl;
 import edu.java.configuration.ClientConfiguration;
-import edu.java.client.github.dto.RepositoryResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;

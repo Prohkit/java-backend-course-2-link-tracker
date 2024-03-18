@@ -163,7 +163,7 @@ class ScrapperClientTest {
     @Test
     void addLinkTracking() throws JsonProcessingException {
         AddLinkRequest addLinkRequest = new AddLinkRequest();
-        addLinkRequest.setLink("");
+        addLinkRequest.setLink(URI.create(""));
 
         Long chatId = 1L;
 
@@ -189,7 +189,7 @@ class ScrapperClientTest {
     @Test
     void addLinkTrackingReturnsBadRequest() throws JsonProcessingException {
         AddLinkRequest addLinkRequest = new AddLinkRequest();
-        addLinkRequest.setLink("");
+        addLinkRequest.setLink(URI.create(""));
 
         Long chatId = 1L;
 
@@ -218,7 +218,7 @@ class ScrapperClientTest {
     @Test
     void removeLinkTracking() throws JsonProcessingException {
         RemoveLinkRequest removeLinkRequest = new RemoveLinkRequest();
-        removeLinkRequest.setLink("");
+        removeLinkRequest.setLink(URI.create(""));
 
         Long chatId = 1L;
 
@@ -244,7 +244,7 @@ class ScrapperClientTest {
     @Test
     void removeLinkTrackingReturnsBadRequest() throws JsonProcessingException {
         RemoveLinkRequest removeLinkRequest = new RemoveLinkRequest();
-        removeLinkRequest.setLink("");
+        removeLinkRequest.setLink(URI.create(""));
 
         Long chatId = 1L;
 

@@ -7,6 +7,13 @@ app:
 spring:
   application:
     name: scrapper
+  datasource:
+    url: jdbc:postgresql://localhost:5437/scrapper
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+  liquibase:
+    enabled: false
 
 server:
   port: 8080
@@ -17,3 +24,5 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+
+link-check-interval: 10m

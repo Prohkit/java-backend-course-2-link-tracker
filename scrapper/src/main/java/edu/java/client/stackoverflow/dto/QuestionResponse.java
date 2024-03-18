@@ -1,6 +1,7 @@
 package edu.java.client.stackoverflow.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public record QuestionResponse(@JsonProperty("items") List<ItemResponse> items) {
@@ -12,6 +13,10 @@ public record QuestionResponse(@JsonProperty("items") List<ItemResponse> items) 
         @JsonProperty("is_answered")
         boolean isAnswered,
         @JsonProperty("score")
-        int score) {
+        int score,
+
+        @JsonProperty("last_activity_date")
+        OffsetDateTime lastActivityDate
+    ) {
     }
 }

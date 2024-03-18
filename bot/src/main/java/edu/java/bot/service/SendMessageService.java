@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.exception.handler.ApiErrorResponse;
 import edu.java.bot.updatewrapper.UpdateWrapper;
+import java.net.URI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +28,11 @@ public class SendMessageService {
 
     public void sendApiError(Long tgChatId, ApiErrorResponse apiErrorResponse) {
         telegramBot.execute(new SendMessage(tgChatId, apiErrorResponse.getExceptionMessage()));
+    }
+
+    public void sendLinkUpdateMessage(Long tgChatId, URI url, String description) {
+        String message = "По ссылке " + url.toString() + " Появилось обновление." + System.lineSeparator()
+            + "Описание обновления: " + description;
+        telegramBot.execute(new SendMessage(tgChatId, message));
     }
 }
