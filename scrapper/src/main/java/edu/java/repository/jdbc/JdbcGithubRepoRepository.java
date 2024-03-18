@@ -2,12 +2,14 @@ package edu.java.repository.jdbc;
 
 import edu.java.domain.GithubRepository;
 import edu.java.repository.GithubRepoRepository;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Primary
 public class JdbcGithubRepoRepository implements GithubRepoRepository {
 
     private final JdbcTemplate jdbcTemplate;
