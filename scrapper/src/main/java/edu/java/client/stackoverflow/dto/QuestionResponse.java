@@ -11,9 +11,12 @@ public record QuestionResponse(@JsonProperty("items") List<ItemResponse> items) 
         @JsonProperty("title")
         String title,
         @JsonProperty("is_answered")
-        boolean isAnswered,
+        Boolean isAnswered,
         @JsonProperty("score")
-        int score,
+        Integer score,
+
+        @JsonProperty("answer_count")
+        Long answerCount,
 
         @JsonProperty("last_activity_date")
         OffsetDateTime lastActivityDate

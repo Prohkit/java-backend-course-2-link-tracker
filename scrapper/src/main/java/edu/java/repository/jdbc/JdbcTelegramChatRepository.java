@@ -3,12 +3,14 @@ package edu.java.repository.jdbc;
 import edu.java.domain.Chat;
 import edu.java.repository.TelegramChatRepository;
 import java.util.List;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Primary
 public class JdbcTelegramChatRepository implements TelegramChatRepository {
     private final JdbcTemplate jdbcTemplate;
 

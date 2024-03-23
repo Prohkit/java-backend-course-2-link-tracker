@@ -4,6 +4,7 @@ import edu.java.domain.Link;
 import edu.java.dto.scrapper.response.LinkResponse;
 import edu.java.dto.scrapper.response.ListLinksResponse;
 import edu.java.repository.LinkRepository;
+import edu.java.service.AdditionalInfoService;
 import edu.java.service.LinkService;
 import java.net.URI;
 import java.sql.Timestamp;
@@ -17,8 +18,11 @@ public class JdbcLinkService implements LinkService {
 
     private final LinkRepository linkRepository;
 
-    public JdbcLinkService(LinkRepository linkRepository) {
+    private final AdditionalInfoService additionalInfoService;
+
+    public JdbcLinkService(LinkRepository linkRepository, AdditionalInfoService additionalInfoService) {
         this.linkRepository = linkRepository;
+        this.additionalInfoService = additionalInfoService;
     }
 
     @Override
@@ -34,6 +38,7 @@ public class JdbcLinkService implements LinkService {
             return new LinkResponse(link.getId(), link.getUrl());
         } else {
             Link link = linkRepository.addLink(linkToAdd);
+            additionalInfoService.addAdditionalInfo(link);
             linkRepository.addChatLinkRelationship(telegramChatId, link.getId());
             return new LinkResponse(link.getId(), link.getUrl());
         }
@@ -49,6 +54,7 @@ public class JdbcLinkService implements LinkService {
             }
             if (!linkRepository.areThereAnyChatLinkRelationshipsByLinkId(linkWithId.getId())) {
                 linkRepository.removeLink(linkWithId);
+                additionalInfoService.removeAdditionalInfo(linkWithId);
             }
             return new LinkResponse(linkWithId.getId(), linkWithId.getUrl());
         }

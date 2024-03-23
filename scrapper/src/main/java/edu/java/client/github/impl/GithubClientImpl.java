@@ -3,7 +3,9 @@ package edu.java.client.github.impl;
 import edu.java.client.Client;
 import edu.java.client.github.GithubClient;
 import edu.java.client.github.dto.RepositoryResponse;
+import edu.java.domain.GithubRepository;
 import edu.java.domain.Link;
+import edu.java.service.GithubRepoService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +16,11 @@ public class GithubClientImpl extends Client implements GithubClient {
 
     private final WebClient webClient;
 
-    public GithubClientImpl(WebClient webClient) {
+    private final GithubRepoService githubService;
+
+    public GithubClientImpl(WebClient webClient, GithubRepoService githubService) {
         this.webClient = webClient;
+        this.githubService = githubService;
     }
 
     private static final String SITE_NAME = "github.com";
@@ -47,8 +52,16 @@ public class GithubClientImpl extends Client implements GithubClient {
 
     private String handleRepositoryResponse(Link link, RepositoryResponse response) {
         if (response.updatedAt().isAfter(link.getLastModifiedTime())) {
+            StringBuilder stringBuilder = new StringBuilder("Есть обновление ")
+                .append(link.getUrl().toString()).append(System.lineSeparator());
             link.setLastModifiedTime(response.updatedAt());
-            return "Есть обновление " + link.getUrl().toString();
+            GithubRepository repoFromDB = githubService.getGithubRepositoryByLinkId(link.getId());
+            if (!repoFromDB.getForksCount().equals(response.forksCount())) {
+                stringBuilder.append("Изменилось количество форков репозитория, было ")
+                    .append(repoFromDB.getForksCount()).append(", стало ").append(response.forksCount())
+                    .append(".").append(System.lineSeparator());
+            }
+            return new String(stringBuilder);
         }
         return null;
     }
@@ -62,7 +75,8 @@ public class GithubClientImpl extends Client implements GithubClient {
         return getFetchRepositoryMatcher(url).find();
     }
 
-    private String getOwnerUserName(String url) {
+    @Override
+    public String getOwnerUserName(String url) {
         Matcher matcher = getFetchRepositoryMatcher(url);
         if (matcher.find()) {
             return matcher.group("ownerUserName");
@@ -70,7 +84,8 @@ public class GithubClientImpl extends Client implements GithubClient {
         return null;
     }
 
-    private String getRepositoryName(String url) {
+    @Override
+    public String getRepositoryName(String url) {
         Matcher matcher = getFetchRepositoryMatcher(url);
         if (matcher.find()) {
             return matcher.group("repositoryName");

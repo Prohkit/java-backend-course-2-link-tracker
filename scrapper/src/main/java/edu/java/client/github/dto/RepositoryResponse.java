@@ -9,6 +9,9 @@ public record RepositoryResponse(
     @JsonProperty("full_name")
     String fullName,
 
+    @JsonProperty("forks_count")
+    Integer forksCount,
+
     @JsonProperty("updated_at")
     OffsetDateTime updatedAt
 ) {

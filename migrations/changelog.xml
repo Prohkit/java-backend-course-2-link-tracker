@@ -11,4 +11,8 @@
     <changeSet id="link_add_columns" author="Prohkit">
         <sqlFile path="sql/link_add_columns.sql"/>
     </changeSet>
+
+    <changeSet id="add_additional_tables" author="Prohkit">
+        <sqlFile path="sql/add_additional_tables.sql"/>
+    </changeSet>
 </databaseChangeLog>
