@@ -1,9 +1,13 @@
 package edu.java.bot.commandhandler;
 
-import edu.java.bot.TempDB;
+import edu.java.bot.client.ScrapperClient;
 import edu.java.bot.service.SendMessageService;
 import edu.java.bot.updatewrapper.UpdateWrapper;
+import edu.java.dto.scrapper.request.RemoveLinkRequest;
+import java.net.URI;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,10 +16,10 @@ public class UntrackCommandHandler extends CommandHandler {
 
     private static final String COMMAND = "/untrack";
 
-    private final TempDB tempDB;
+    private final ScrapperClient client;
 
-    public UntrackCommandHandler(TempDB tempDB, SendMessageService messageService) {
-        this.tempDB = tempDB;
+    public UntrackCommandHandler(ScrapperClient client, SendMessageService messageService) {
+        this.client = client;
         this.messageService = messageService;
     }
 
@@ -30,14 +34,13 @@ public class UntrackCommandHandler extends CommandHandler {
     private boolean handleUntrackCommand(UpdateWrapper update) {
         if (update.containsUrlInMessage()) {
             String url = update.getURLFromMessage();
-            if (tempDB.containsResource(url)) {
-                tempDB.removeResourceFromDB(url);
+            ResponseEntity<?> responseEntity =
+                client.removeLinkTracking(update.getChatId(), new RemoveLinkRequest(URI.create(url)));
+            if (responseEntity != null && responseEntity.getStatusCode().equals(HttpStatus.OK)) {
                 messageService.sendMessage(update, "Прекращаем отслеживание ссылки");
                 log.info("Прекращаем отслеживание ссылки: " + url);
-                return true;
             }
         }
-        messageService.sendMessage(update, "Такая ссылка не отслеживается");
         return true;
     }
 }

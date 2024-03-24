@@ -1,10 +1,13 @@
 package edu.java.bot.commandhandler;
 
-import edu.java.bot.TempDB;
+import edu.java.bot.client.ScrapperClient;
 import edu.java.bot.service.SendMessageService;
 import edu.java.bot.updatewrapper.UpdateWrapper;
-import java.util.Set;
+import edu.java.dto.scrapper.response.ListLinksResponse;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,30 +16,37 @@ public class ListCommandHandler extends CommandHandler {
 
     private static final String COMMAND = "/list";
 
-    private final TempDB tempDB;
+    private final ScrapperClient client;
 
-    public ListCommandHandler(TempDB tempDB, SendMessageService messageService) {
-        this.tempDB = tempDB;
+    public ListCommandHandler(ScrapperClient client, SendMessageService messageService) {
+        this.client = client;
         this.messageService = messageService;
     }
 
     @Override
     public boolean handleCommand(UpdateWrapper update) {
         if (update.getCommand().equals(COMMAND)) {
-            if (!tempDB.isEmpty()) {
-                messageService.sendMessage(update, buildListOfTrackedLinks());
+            ResponseEntity<ListLinksResponse> responseEntity = client.getAllTrackedLinks(update.getChatId());
+            if (responseEntity != null && responseEntity.getStatusCode().equals(HttpStatus.OK)) {
+                ListLinksResponse listLinksResponse = responseEntity.getBody();
+                messageService.sendMessage(update, buildListOfTrackedLinks(listLinksResponse));
                 log.info("Показываем список используемых ссылок");
                 return true;
             }
-            messageService.sendMessage(update, "Отслеживаемых ссылок нет");
-            return true;
         }
         return false;
     }
 
-    private String buildListOfTrackedLinks() {
-        Set<String> resources = tempDB.getAllResources();
-        StringBuilder sb = new StringBuilder("Список отслеживаемых ссылок: ")
+    private String buildListOfTrackedLinks(ListLinksResponse listLinksResponse) {
+        if (listLinksResponse.getSize() == 0) {
+            return "Нет отслеживаемых ссылок.";
+        }
+        List<String> resources =
+            listLinksResponse.getLinks().stream().map(linkResponse -> linkResponse.getUrl().toString()).toList();
+        StringBuilder sb = new StringBuilder("Количество отслеживаемых ссылок: ")
+            .append(listLinksResponse.getSize())
+            .append(System.lineSeparator())
+            .append("Список отслеживаемых ссылок: ")
             .append(System.lineSeparator());
         resources.forEach(resource -> sb.append(resource).append(System.lineSeparator()));
         return new String(sb);

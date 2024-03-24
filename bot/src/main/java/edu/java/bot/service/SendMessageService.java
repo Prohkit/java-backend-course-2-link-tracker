@@ -27,7 +27,7 @@ public class SendMessageService {
     }
 
     public void sendApiError(Long tgChatId, ApiErrorResponse apiErrorResponse) {
-        telegramBot.execute(new SendMessage(tgChatId, apiErrorResponse.getExceptionMessage()));
+        telegramBot.execute(new SendMessage(tgChatId, apiErrorResponse.getDescription()));
     }
 
     public void sendLinkUpdateMessage(Long tgChatId, URI url, String description) {
