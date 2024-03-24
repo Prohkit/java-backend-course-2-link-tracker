@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 public interface JpaTelegramChatRepository extends JpaRepository<Chat, Long> {
     @Transactional
     @Modifying
-    @Query(value = "delete from chat_link where chat_id = :linkId returning link_id", nativeQuery = true)
-    List<Long> removeChatLinkRelationships(@Param("linkId") long linkId);
+    @Query(value = "delete from chat_link where chat_id = :chatId returning link_id", nativeQuery = true)
+    List<Long> removeChatLinkRelationships(@Param("chatId") long chatId);
 
     @Transactional
     @Query(value = "select chat_id from chat_link where link_id = :linkId", nativeQuery = true)
