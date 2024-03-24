@@ -1,4 +1,4 @@
-package edu.java.service.jdbc;
+package edu.java.service.impl;
 
 import edu.java.domain.Link;
 import edu.java.dto.scrapper.response.LinkResponse;
@@ -11,16 +11,14 @@ import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
-import org.springframework.stereotype.Service;
 
-@Service
-public class JdbcLinkService implements LinkService {
+public class LinkServiceImpl implements LinkService {
 
     private final LinkRepository linkRepository;
 
     private final AdditionalInfoService additionalInfoService;
 
-    public JdbcLinkService(LinkRepository linkRepository, AdditionalInfoService additionalInfoService) {
+    public LinkServiceImpl(LinkRepository linkRepository, AdditionalInfoService additionalInfoService) {
         this.linkRepository = linkRepository;
         this.additionalInfoService = additionalInfoService;
     }

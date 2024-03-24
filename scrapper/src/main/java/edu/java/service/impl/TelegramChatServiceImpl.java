@@ -1,4 +1,4 @@
-package edu.java.service.jdbc;
+package edu.java.service.impl;
 
 import edu.java.domain.Chat;
 import edu.java.domain.Link;
@@ -7,10 +7,8 @@ import edu.java.repository.TelegramChatRepository;
 import edu.java.service.AdditionalInfoService;
 import edu.java.service.TelegramChatService;
 import java.util.List;
-import org.springframework.stereotype.Service;
 
-@Service
-public class JdbcTelegramChatService implements TelegramChatService {
+public class TelegramChatServiceImpl implements TelegramChatService {
 
     private final TelegramChatRepository telegramChatRepository;
 
@@ -18,7 +16,7 @@ public class JdbcTelegramChatService implements TelegramChatService {
 
     private final AdditionalInfoService additionalInfoService;
 
-    public JdbcTelegramChatService(
+    public TelegramChatServiceImpl(
         TelegramChatRepository telegramChatRepository,
         LinkRepository linkRepository,
         AdditionalInfoService additionalInfoService

@@ -1,17 +1,15 @@
-package edu.java.service.jdbc;
+package edu.java.service.impl;
 
 import edu.java.client.github.dto.RepositoryResponse;
 import edu.java.domain.GithubRepository;
 import edu.java.repository.GithubRepoRepository;
 import edu.java.service.GithubRepoService;
-import org.springframework.stereotype.Service;
 
-@Service
-public class JdbcGithubRepoService implements GithubRepoService {
+public class GithubRepoServiceImpl implements GithubRepoService {
 
     private final GithubRepoRepository githubRepository;
 
-    public JdbcGithubRepoService(GithubRepoRepository githubRepository) {
+    public GithubRepoServiceImpl(GithubRepoRepository githubRepository) {
         this.githubRepository = githubRepository;
     }
 
