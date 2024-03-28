@@ -1,5 +1,8 @@
 package edu.java.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
+@Table(name = "stackoverflow_question")
 public class StackOverflowQuestion {
+    @Id
     private Long questionId;
     private Long linkId;
     private String title;

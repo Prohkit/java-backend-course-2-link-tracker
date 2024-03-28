@@ -15,4 +15,8 @@
     <changeSet id="add_additional_tables" author="Prohkit">
         <sqlFile path="sql/add_additional_tables.sql"/>
     </changeSet>
+
+    <changeSet id="change_additional_table_ids" author="Prohkit">
+        <sqlFile path="sql/change_additional_table_ids.sql"/>
+    </changeSet>
 </databaseChangeLog>

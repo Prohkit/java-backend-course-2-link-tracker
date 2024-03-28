@@ -1,18 +1,16 @@
-package edu.java.service.jdbc;
+package edu.java.service.impl;
 
 import edu.java.client.stackoverflow.dto.QuestionResponse;
 import edu.java.domain.StackOverflowQuestion;
 import edu.java.repository.StackOverflowQuestionRepository;
 import edu.java.service.StackOverflowQuestionService;
 import java.util.List;
-import org.springframework.stereotype.Service;
 
-@Service
-public class JdbcStackOverflowQuestionService implements StackOverflowQuestionService {
+public class StackOverflowQuestionServiceImpl implements StackOverflowQuestionService {
 
     private final StackOverflowQuestionRepository stackOverflowRepository;
 
-    public JdbcStackOverflowQuestionService(StackOverflowQuestionRepository stackOverflowRepository) {
+    public StackOverflowQuestionServiceImpl(StackOverflowQuestionRepository stackOverflowRepository) {
         this.stackOverflowRepository = stackOverflowRepository;
     }
 
@@ -39,6 +37,6 @@ public class JdbcStackOverflowQuestionService implements StackOverflowQuestionSe
 
     @Override
     public List<StackOverflowQuestion> getStackOverflowQuestionByLinkId(Long linkId) {
-        return null;
+        return stackOverflowRepository.findStackOverflowQuestionsByLinkId(linkId);
     }
 }

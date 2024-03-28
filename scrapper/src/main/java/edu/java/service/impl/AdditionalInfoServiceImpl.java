@@ -1,4 +1,4 @@
-package edu.java.service.jdbc;
+package edu.java.service.impl;
 
 import edu.java.client.github.GithubClient;
 import edu.java.client.github.dto.RepositoryResponse;
@@ -8,10 +8,8 @@ import edu.java.domain.Link;
 import edu.java.service.AdditionalInfoService;
 import edu.java.service.GithubRepoService;
 import edu.java.service.StackOverflowQuestionService;
-import org.springframework.stereotype.Service;
 
-@Service
-public class JdbcAdditionalInfoService implements AdditionalInfoService {
+public class AdditionalInfoServiceImpl implements AdditionalInfoService {
 
     private final GithubRepoService githubService;
 
@@ -25,7 +23,7 @@ public class JdbcAdditionalInfoService implements AdditionalInfoService {
 
     private final String stackoverflow = "stackoverflow";
 
-    public JdbcAdditionalInfoService(
+    public AdditionalInfoServiceImpl(
         GithubRepoService githubService,
         GithubClient githubClient,
         StackOverflowQuestionService stackOverflowService,

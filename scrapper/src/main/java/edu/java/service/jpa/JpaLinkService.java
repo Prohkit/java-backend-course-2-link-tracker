@@ -1,9 +1,9 @@
-package edu.java.service.jdbc;
+package edu.java.service.jpa;
 
 import edu.java.domain.Link;
 import edu.java.dto.scrapper.response.LinkResponse;
 import edu.java.dto.scrapper.response.ListLinksResponse;
-import edu.java.repository.LinkRepository;
+import edu.java.repository.jpa.JpaLinkRepository;
 import edu.java.service.AdditionalInfoService;
 import edu.java.service.LinkService;
 import java.net.URI;
@@ -11,16 +11,14 @@ import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
-import org.springframework.stereotype.Service;
 
-@Service
-public class JdbcLinkService implements LinkService {
+public class JpaLinkService implements LinkService {
 
-    private final LinkRepository linkRepository;
+    private final JpaLinkRepository linkRepository;
 
     private final AdditionalInfoService additionalInfoService;
 
-    public JdbcLinkService(LinkRepository linkRepository, AdditionalInfoService additionalInfoService) {
+    public JpaLinkService(JpaLinkRepository linkRepository, AdditionalInfoService additionalInfoService) {
         this.linkRepository = linkRepository;
         this.additionalInfoService = additionalInfoService;
     }
@@ -29,15 +27,16 @@ public class JdbcLinkService implements LinkService {
     public LinkResponse addLink(long telegramChatId, URI url) {
         Link linkToAdd = Link.builder()
             .url(url)
+            .lastModifiedTime(OffsetDateTime.now())
             .build();
-        if (linkRepository.isLinkExists(linkToAdd)) {
+        if (linkRepository.existsLinkByUrl(linkToAdd.getUrl().toString())) {
             Link link = linkRepository.findLinkByUrl(linkToAdd.getUrl());
             if (!linkRepository.isChatLinkRelationshipExists(telegramChatId, link.getId())) {
                 linkRepository.addChatLinkRelationship(telegramChatId, link.getId());
             }
             return new LinkResponse(link.getId(), link.getUrl());
         } else {
-            Link link = linkRepository.addLink(linkToAdd);
+            Link link = linkRepository.save(linkToAdd);
             additionalInfoService.addAdditionalInfo(link);
             linkRepository.addChatLinkRelationship(telegramChatId, link.getId());
             return new LinkResponse(link.getId(), link.getUrl());
@@ -47,13 +46,13 @@ public class JdbcLinkService implements LinkService {
     @Override
     public LinkResponse removeLink(long telegramChatId, URI url) {
         Link linkToRemove = Link.builder().url(url).build();
-        if (linkRepository.isLinkExists(linkToRemove)) {
+        if (linkRepository.existsLinkByUrl(linkToRemove.getUrl().toString())) {
             Link linkWithId = linkRepository.findLinkByUrl(linkToRemove.getUrl());
             if (linkRepository.isChatLinkRelationshipExists(telegramChatId, linkWithId.getId())) {
                 linkRepository.removeChatLinkRelationship(telegramChatId, linkWithId.getId());
             }
             if (!linkRepository.areThereAnyChatLinkRelationshipsByLinkId(linkWithId.getId())) {
-                linkRepository.removeLink(linkWithId);
+                linkRepository.deleteById(linkWithId.getId());
                 additionalInfoService.removeAdditionalInfo(linkWithId);
             }
             return new LinkResponse(linkWithId.getId(), linkWithId.getUrl());
@@ -63,7 +62,7 @@ public class JdbcLinkService implements LinkService {
 
     @Override
     public ListLinksResponse listAllLinks(long telegramChatId) {
-        List<Link> linkList = linkRepository.findAllLinks(telegramChatId);
+        List<Link> linkList = linkRepository.findLinksByChatId(telegramChatId);
         List<LinkResponse> linkResponseList = linkList.stream()
             .map(link -> new LinkResponse(link.getId(), link.getUrl()))
             .toList();
@@ -73,8 +72,9 @@ public class JdbcLinkService implements LinkService {
     @Override
     public boolean isLinkConnectedToChat(long telegramChat, URI url) {
         Link linkToCheck = Link.builder().url(url).build();
-        if (linkRepository.isLinkExists(linkToCheck)) {
-            return linkRepository.isChatLinkRelationshipExists(telegramChat, telegramChat);
+        if (linkRepository.existsLinkByUrl(linkToCheck.getUrl().toString())) {
+            Link link = linkRepository.findLinkByUrl(url);
+            return linkRepository.isChatLinkRelationshipExists(telegramChat, link.getId());
         }
         return false;
     }
@@ -92,16 +92,16 @@ public class JdbcLinkService implements LinkService {
 
     @Override
     public Link findLinkById(Long id) {
-        return linkRepository.findLinkById(id);
+        return linkRepository.findById(id).orElseThrow();
     }
 
     @Override
     public void updateLastModifiedTime(long id, OffsetDateTime lastModifiedTime) {
-        linkRepository.updateLinkLastModifiedTime(Link.builder().id(id).lastModifiedTime(lastModifiedTime).build());
+        linkRepository.updateLinkLastModifiedTime(id, lastModifiedTime);
     }
 
     @Override
     public void updateLastUpdateCheckTime(long id) {
-        linkRepository.updateLinkLastUpdateCheckTime(Link.builder().id(id).build());
+        linkRepository.updateLinkLastUpdateCheckTime(id);
     }
 }

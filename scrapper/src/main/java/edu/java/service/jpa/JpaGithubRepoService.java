@@ -1,17 +1,15 @@
-package edu.java.service.jdbc;
+package edu.java.service.jpa;
 
 import edu.java.client.github.dto.RepositoryResponse;
 import edu.java.domain.GithubRepository;
-import edu.java.repository.GithubRepoRepository;
+import edu.java.repository.jpa.JpaGithubRepoRepository;
 import edu.java.service.GithubRepoService;
-import org.springframework.stereotype.Service;
 
-@Service
-public class JdbcGithubRepoService implements GithubRepoService {
+public class JpaGithubRepoService implements GithubRepoService {
 
-    private final GithubRepoRepository githubRepository;
+    private final JpaGithubRepoRepository githubRepository;
 
-    public JdbcGithubRepoService(GithubRepoRepository githubRepository) {
+    public JpaGithubRepoService(JpaGithubRepoRepository githubRepository) {
         this.githubRepository = githubRepository;
     }
 
@@ -19,17 +17,19 @@ public class JdbcGithubRepoService implements GithubRepoService {
     public GithubRepository addGithubRepository(RepositoryResponse repositoryResponse, Long linkId) {
         GithubRepository repository = GithubRepository.builder()
             .repositoryId(repositoryResponse.repositoryId())
+            .linkId(linkId)
             .fullName(repositoryResponse.fullName())
             .forksCount(repositoryResponse.forksCount())
             .updatedAt(repositoryResponse.updatedAt())
-            .linkId(linkId)
             .build();
-        return githubRepository.addGithubRepository(repository, linkId);
+        return githubRepository.save(repository);
     }
 
     @Override
     public GithubRepository removeGithubRepository(Long linkId) {
-        return githubRepository.removeGithubRepository(linkId);
+        GithubRepository githubRepositoryToReturn = getGithubRepositoryByLinkId(linkId);
+        githubRepository.deleteGithubRepositoryByLinkId(linkId);
+        return githubRepositoryToReturn;
     }
 
     @Override

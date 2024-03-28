@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ListLinksResponse {
     private List<LinkResponse> links;
-    Integer size;
+    private Integer size;
 }
