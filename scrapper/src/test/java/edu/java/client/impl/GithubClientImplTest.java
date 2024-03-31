@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.client.github.dto.RepositoryResponse;
 import edu.java.client.github.impl.GithubClientImpl;
 import edu.java.configuration.ClientConfiguration;
+import edu.java.configuration.RetryConfig;
 import edu.java.service.GithubRepoService;
 import edu.java.service.StackOverflowQuestionService;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +26,8 @@ public class GithubClientImplTest {
 
     @BeforeEach
     public void setUp() {
-        githubClient = new ClientConfiguration(githubRepoService, stackOverflowQuestionService).githubClient(
+        RetryConfig retryConfig = new RetryConfig();
+        githubClient = new ClientConfiguration(githubRepoService, stackOverflowQuestionService, retryConfig).githubClient(
             "http://localhost:8082");
     }
 

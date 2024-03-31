@@ -33,6 +33,8 @@ public class ListCommandHandler extends CommandHandler {
                 log.info("Показываем список используемых ссылок");
                 return true;
             }
+            messageService.sendMessage(update, "Сервис временно недоступен.");
+            return true;
         }
         return false;
     }
