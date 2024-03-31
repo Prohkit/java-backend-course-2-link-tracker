@@ -6,8 +6,36 @@ spring:
     name: bot
   jackson:
     time-zone: UTC
-#  config:
-#    import: token.properties
+  #  config:
+  #    import: token.properties
+  cache:
+    jcache:
+      provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
+    cache-names:
+      - rate-limit-buckets-bot
+    caffeine:
+      spec: maximumSize=100000,expireAfterAccess=60s
+
+bucket4j:
+  enabled: true
+  filters:
+    - cache-name: rate-limit-buckets-bot
+      url: /updates
+      http-response-body: "{ \"status\": 429, \"error\": \"Too Many Requests\", \"message\": \"You have exhausted your API Request Quota\" }"
+      rate-limits:
+        - cache-key: getHeader('X-Forwarded-For')
+          bandwidths:
+            - capacity: 100
+              time: 1
+              unit: minutes
+              refill-speed: interval
+
+retry:
+  status-codes: 500,502,503,504
+  max-attempts: 3
+  initial-delay: 1
+  max-delay: 10
+  linear-multiplier: 2
 
 server:
   port: 8090
