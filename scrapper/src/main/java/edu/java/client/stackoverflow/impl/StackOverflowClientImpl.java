@@ -3,13 +3,16 @@ package edu.java.client.stackoverflow.impl;
 import edu.java.client.Client;
 import edu.java.client.stackoverflow.StackOverflowClient;
 import edu.java.client.stackoverflow.dto.QuestionResponse;
+import edu.java.configuration.RetryConfig;
 import edu.java.domain.Link;
 import edu.java.domain.StackOverflowQuestion;
+import edu.java.exception.handler.ApiErrorResponse;
 import edu.java.service.StackOverflowQuestionService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 @Slf4j
 @SuppressWarnings("MultipleStringLiterals")
@@ -19,9 +22,16 @@ public class StackOverflowClientImpl extends Client implements StackOverflowClie
 
     private final StackOverflowQuestionService stackOverflowQuestionService;
 
-    public StackOverflowClientImpl(WebClient webClient, StackOverflowQuestionService stackOverflowQuestionService) {
+    private final RetryConfig retryConfig;
+
+    public StackOverflowClientImpl(
+        WebClient webClient,
+        StackOverflowQuestionService stackOverflowQuestionService,
+        RetryConfig retryConfig
+    ) {
         this.webClient = webClient;
         this.stackOverflowQuestionService = stackOverflowQuestionService;
+        this.retryConfig = retryConfig;
     }
 
     private static final String SITE_NAME = "stackoverflow.com";
@@ -33,6 +43,12 @@ public class StackOverflowClientImpl extends Client implements StackOverflowClie
             .uri("questions/{questionId}/?site=stackoverflow&filter=withbody", questionId)
             .retrieve()
             .bodyToMono(QuestionResponse.class)
+            .retryWhen(retryConfig.createRetryPolicy(RetryConfig.BackOffType.LINEAR))
+            .doOnError(WebClientResponseException.class, exception -> {
+                ApiErrorResponse apiErrorResponse = exception.getResponseBodyAs(ApiErrorResponse.class);
+                log.error("Message: {}", apiErrorResponse.getExceptionMessage());
+            })
+            .onErrorComplete()
             .block();
     }
 

@@ -3,13 +3,16 @@ package edu.java.client.github.impl;
 import edu.java.client.Client;
 import edu.java.client.github.GithubClient;
 import edu.java.client.github.dto.RepositoryResponse;
+import edu.java.configuration.RetryConfig;
 import edu.java.domain.GithubRepository;
 import edu.java.domain.Link;
+import edu.java.exception.handler.ApiErrorResponse;
 import edu.java.service.GithubRepoService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 @Slf4j
 public class GithubClientImpl extends Client implements GithubClient {
@@ -18,9 +21,12 @@ public class GithubClientImpl extends Client implements GithubClient {
 
     private final GithubRepoService githubService;
 
-    public GithubClientImpl(WebClient webClient, GithubRepoService githubService) {
+    private final RetryConfig retryConfig;
+
+    public GithubClientImpl(WebClient webClient, GithubRepoService githubService, RetryConfig retryConfig) {
         this.webClient = webClient;
         this.githubService = githubService;
+        this.retryConfig = retryConfig;
     }
 
     private static final String SITE_NAME = "github.com";
@@ -32,6 +38,12 @@ public class GithubClientImpl extends Client implements GithubClient {
             .uri("/repos/{ownerUserName}/{repositoryName}", ownerUserName, repositoryName)
             .retrieve()
             .bodyToMono(RepositoryResponse.class)
+            .retryWhen(retryConfig.createRetryPolicy(RetryConfig.BackOffType.LINEAR))
+            .doOnError(WebClientResponseException.class, exception -> {
+                ApiErrorResponse apiErrorResponse = exception.getResponseBodyAs(ApiErrorResponse.class);
+                log.error("Message: {}", apiErrorResponse.getExceptionMessage());
+            })
+            .onErrorComplete()
             .block();
     }
 

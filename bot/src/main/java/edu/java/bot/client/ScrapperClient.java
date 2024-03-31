@@ -1,5 +1,6 @@
 package edu.java.bot.client;
 
+import edu.java.bot.configuration.RetryConfig;
 import edu.java.bot.exception.handler.ApiErrorResponse;
 import edu.java.bot.service.SendMessageService;
 import edu.java.dto.scrapper.request.AddLinkRequest;
@@ -20,9 +21,12 @@ public class ScrapperClient {
 
     private final SendMessageService service;
 
-    public ScrapperClient(WebClient webClient, SendMessageService service) {
+    private final RetryConfig retryConfig;
+
+    public ScrapperClient(WebClient webClient, SendMessageService service, RetryConfig retryConfig) {
         this.webClient = webClient;
         this.service = service;
+        this.retryConfig = retryConfig;
     }
 
     public ResponseEntity<Void> registerChat(Long id) {
@@ -31,6 +35,7 @@ public class ScrapperClient {
             .uri("/tg-chat/" + id)
             .retrieve()
             .toEntity(Void.class)
+            .retryWhen(retryConfig.createRetryPolicy(RetryConfig.BackOffType.LINEAR))
             .doOnError(WebClientResponseException.class, exception -> handleError(id, exception))
             .onErrorComplete()
             .block();
@@ -42,6 +47,7 @@ public class ScrapperClient {
             .uri("/tg-chat/" + id)
             .retrieve()
             .toEntity(Void.class)
+            .retryWhen(retryConfig.createRetryPolicy(RetryConfig.BackOffType.LINEAR))
             .doOnError(WebClientResponseException.class, exception -> handleError(id, exception))
             .onErrorComplete()
             .block();
@@ -54,6 +60,7 @@ public class ScrapperClient {
             .header("Tg-Chat-Id", String.valueOf(tgChatId))
             .retrieve()
             .toEntity(ListLinksResponse.class)
+            .retryWhen(retryConfig.createRetryPolicy(RetryConfig.BackOffType.LINEAR))
             .doOnError(WebClientResponseException.class, exception -> handleError(tgChatId, exception))
             .onErrorComplete()
             .block();
@@ -67,6 +74,7 @@ public class ScrapperClient {
             .bodyValue(linkRequest)
             .retrieve()
             .toEntity(LinkResponse.class)
+            .retryWhen(retryConfig.createRetryPolicy(RetryConfig.BackOffType.LINEAR))
             .doOnError(WebClientResponseException.class, exception -> handleError(tgChatId, exception))
             .onErrorComplete()
             .block();
@@ -80,6 +88,7 @@ public class ScrapperClient {
             .body(Mono.just(linkRequest), RemoveLinkRequest.class)
             .retrieve()
             .toEntity(Void.class)
+            .retryWhen(retryConfig.createRetryPolicy(RetryConfig.BackOffType.LINEAR))
             .doOnError(WebClientResponseException.class, exception -> handleError(tgChatId, exception))
             .onErrorComplete()
             .block();
