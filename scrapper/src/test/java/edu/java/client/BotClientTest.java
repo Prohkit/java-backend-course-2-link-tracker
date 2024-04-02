@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.dto.bot.LinkUpdate;
 import java.net.URI;
 import java.util.List;
+import edu.java.scrapper.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +17,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 
 @WireMockTest(httpPort = 8090)
 @SpringBootTest
-class BotClientTest {
+class BotClientTest extends IntegrationTest {
 
     @Autowired
     private BotClient botClient;
