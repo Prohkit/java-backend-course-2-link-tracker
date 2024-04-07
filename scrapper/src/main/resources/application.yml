@@ -4,6 +4,13 @@ app:
     interval: 10s
     force-check-delay: 10s
   database-access-type: jpa
+  use-queue: false
+  kafka-configuration-properties:
+    bootstrap-servers: 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+    updates-topic:
+      name: queuing.updates.send
+      partitions: 2
+      replicas: 2
 
 spring:
   application:
@@ -22,6 +29,9 @@ spring:
       - rate-limit-buckets-scrapper
     caffeine:
       spec: maximumSize=100000,expireAfterAccess=60s
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
 
 bucket4j:
   enabled: true
