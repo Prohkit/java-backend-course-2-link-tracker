@@ -1,6 +1,5 @@
 package edu.java.configuration;
 
-import edu.java.client.BotClient;
 import edu.java.client.github.impl.GithubClientImpl;
 import edu.java.client.stackoverflow.impl.StackOverflowClientImpl;
 import edu.java.service.GithubRepoService;
@@ -41,10 +40,5 @@ public class ClientConfiguration {
             stackOverflowQuestionService,
             retryConfig
         );
-    }
-
-    @Bean
-    public BotClient botClient(@Value("http://localhost:8090") String baseUrl) {
-        return new BotClient(WebClient.builder().baseUrl(baseUrl).build(), retryConfig);
     }
 }
