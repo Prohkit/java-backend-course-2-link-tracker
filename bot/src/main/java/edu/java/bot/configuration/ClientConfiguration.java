@@ -12,12 +12,15 @@ public class ClientConfiguration {
 
     private final SendMessageService service;
 
-    public ClientConfiguration(SendMessageService service) {
+    private final RetryConfig retryConfig;
+
+    public ClientConfiguration(SendMessageService service, RetryConfig retryConfig) {
         this.service = service;
+        this.retryConfig = retryConfig;
     }
 
     @Bean
     public ScrapperClient scrapperClient(@Value("http://localhost:8080") String baseUrl) {
-        return new ScrapperClient(WebClient.builder().baseUrl(baseUrl).build(), service);
+        return new ScrapperClient(WebClient.builder().baseUrl(baseUrl).build(), service, retryConfig);
     }
 }

@@ -43,6 +43,9 @@
         <!-- Linters -->
         <maven-checkstyle-plugin.version>3.3.1</maven-checkstyle-plugin.version>
         <checkstyle.version>10.12.7</checkstyle.version>
+
+        <bucket4j.version>0.12.4</bucket4j.version>
+        <caffeine.version>3.1.8</caffeine.version>
     </properties>
 
     <modules>
@@ -92,6 +95,22 @@
     </dependencyManagement>
 
     <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>com.giffing.bucket4j.spring.boot.starter</groupId>-->
+<!--            <artifactId>bucket4j-spring-boot-starter</artifactId>-->
+<!--            <version>${bucket4j.version}</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>jcache</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>

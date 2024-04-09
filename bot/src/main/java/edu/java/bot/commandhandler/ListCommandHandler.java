@@ -31,8 +31,8 @@ public class ListCommandHandler extends CommandHandler {
                 ListLinksResponse listLinksResponse = responseEntity.getBody();
                 messageService.sendMessage(update, buildListOfTrackedLinks(listLinksResponse));
                 log.info("Показываем список используемых ссылок");
-                return true;
             }
+            return true;
         }
         return false;
     }

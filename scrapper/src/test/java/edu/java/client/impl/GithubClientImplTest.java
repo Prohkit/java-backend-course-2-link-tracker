@@ -4,10 +4,13 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.client.github.dto.RepositoryResponse;
 import edu.java.client.github.impl.GithubClientImpl;
 import edu.java.configuration.ClientConfiguration;
+import edu.java.configuration.RetryConfig;
 import edu.java.service.GithubRepoService;
 import edu.java.service.StackOverflowQuestionService;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.List;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.ok;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
@@ -17,16 +20,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 @WireMockTest(httpPort = 8082)
 public class GithubClientImplTest {
 
-    private GithubClientImpl githubClient;
+    private static GithubClientImpl githubClient;
 
-    private GithubRepoService githubRepoService;
+    private static GithubRepoService githubRepoService;
 
-    private StackOverflowQuestionService stackOverflowQuestionService;
+    private static StackOverflowQuestionService stackOverflowQuestionService;
 
-    @BeforeEach
-    public void setUp() {
-        githubClient = new ClientConfiguration(githubRepoService, stackOverflowQuestionService).githubClient(
-            "http://localhost:8082");
+    @BeforeAll
+    public static void setUp() {
+        RetryConfig retryConfig = new RetryConfig();
+        ReflectionTestUtils.setField(retryConfig, "maxAttempts", 5);
+        ReflectionTestUtils.setField(retryConfig, "initialDelay", 1);
+        ReflectionTestUtils.setField(retryConfig, "maxDelay", 10);
+        ReflectionTestUtils.setField(retryConfig, "statusCodes", List.of(500, 502, 503, 504));
+        ReflectionTestUtils.setField(retryConfig, "linearMultiplier", 2);
+        githubClient =
+            new ClientConfiguration(githubRepoService, stackOverflowQuestionService, retryConfig).githubClient(
+                "http://localhost:8082");
     }
 
     @Test
