@@ -12,23 +12,9 @@ public record ApplicationConfig(
     @NotNull
     @Bean
     Scheduler scheduler,
-    AccessType databaseAccessType,
-    KafkaConfigurationProperties kafkaConfigurationProperties,
-    boolean useQueue
+    AccessType databaseAccessType
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
-    }
-
-    public record KafkaConfigurationProperties(
-        String bootstrapServers,
-        UpdatesTopic updatesTopic
-    ) {
-        public record UpdatesTopic(
-            String name,
-            Integer partitions,
-            Integer replicas
-        ) {
-        }
     }
 
     public enum AccessType {

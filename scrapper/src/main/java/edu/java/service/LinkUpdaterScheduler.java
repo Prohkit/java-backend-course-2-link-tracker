@@ -1,11 +1,9 @@
-package edu.java.service.updater;
+package edu.java.service;
 
+import edu.java.client.BotClient;
 import edu.java.client.ClientsChain;
 import edu.java.domain.Link;
 import edu.java.dto.bot.LinkUpdate;
-import edu.java.service.LinkService;
-import edu.java.service.NotificationSendingService;
-import edu.java.service.TelegramChatService;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -18,7 +16,7 @@ public class LinkUpdaterScheduler {
 
     private final ClientsChain chain;
 
-    private final NotificationSendingService notificationSendingService;
+    private final BotClient botClient;
 
     private final LinkService linkService;
 
@@ -26,12 +24,12 @@ public class LinkUpdaterScheduler {
 
     public LinkUpdaterScheduler(
         ClientsChain chain,
-        NotificationSendingService notificationSendingService,
+        BotClient botClient,
         LinkService linkService,
         TelegramChatService telegramChatService
     ) {
         this.chain = chain;
-        this.notificationSendingService = notificationSendingService;
+        this.botClient = botClient;
         this.linkService = linkService;
         this.telegramChatService = telegramChatService;
     }
@@ -63,7 +61,7 @@ public class LinkUpdaterScheduler {
                 .description(description)
                 .tgChatIds(telegramChatIds)
                 .build();
-            notificationSendingService.send(linkUpdate);
+            botClient.sendUpdate(linkUpdate);
         }
     }
 }
