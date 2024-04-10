@@ -10,9 +10,22 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public record ApplicationConfig(
     @NotEmpty
-    String telegramToken
+    String telegramToken,
+    KafkaConfigurationProperties kafkaConfigurationProperties
 ) {
     @Bean TelegramBot telegramBot() {
         return new TelegramBot(telegramToken);
+    }
+
+    public record KafkaConfigurationProperties(
+        String bootstrapServers,
+        UpdatesTopic updatesTopic
+    ) {
+        public record UpdatesTopic(
+            String name,
+            Integer partitions,
+            Integer replicas
+        ) {
+        }
     }
 }

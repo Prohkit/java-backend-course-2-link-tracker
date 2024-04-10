@@ -1,15 +1,16 @@
-package edu.java.client;
+package edu.java.service.notificationsender.http;
 
 import edu.java.configuration.RetryConfig;
 import edu.java.dto.bot.LinkUpdate;
 import edu.java.dto.scrapper.response.LinkResponse;
 import edu.java.exception.handler.ApiErrorResponse;
+import edu.java.service.NotificationSendingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 @Slf4j
-public class BotClient {
+public class BotClient implements NotificationSendingService {
     private final WebClient webClient;
 
     private final RetryConfig retryConfig;
@@ -19,7 +20,8 @@ public class BotClient {
         this.retryConfig = retryConfig;
     }
 
-    public void sendUpdate(LinkUpdate linkUpdate) {
+    @Override
+    public void send(LinkUpdate linkUpdate) {
         webClient
             .post()
             .uri("/updates")
