@@ -1,11 +1,10 @@
-package edu.java.client;
+package edu.java.service.notificationsender.http;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.dto.bot.LinkUpdate;
+import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
 import java.util.List;
-import edu.java.scrapper.IntegrationTest;
-import edu.java.service.notificationsender.http.BotClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
