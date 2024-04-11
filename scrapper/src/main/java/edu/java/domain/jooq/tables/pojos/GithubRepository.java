@@ -31,7 +31,7 @@ public class GithubRepository implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private Long repositoryId;
     private Long linkId;
     private String fullName;
     private Integer forksCount;
@@ -40,22 +40,22 @@ public class GithubRepository implements Serializable {
     public GithubRepository() {}
 
     public GithubRepository(GithubRepository value) {
-        this.id = value.id;
+        this.repositoryId = value.repositoryId;
         this.linkId = value.linkId;
         this.fullName = value.fullName;
         this.forksCount = value.forksCount;
         this.updatedAt = value.updatedAt;
     }
 
-    @ConstructorProperties({ "id", "linkId", "fullName", "forksCount", "updatedAt" })
+    @ConstructorProperties({ "repositoryId", "linkId", "fullName", "forksCount", "updatedAt" })
     public GithubRepository(
-        @NotNull Long id,
+        @NotNull Long repositoryId,
         @Nullable Long linkId,
         @NotNull String fullName,
         @NotNull Integer forksCount,
         @Nullable OffsetDateTime updatedAt
     ) {
-        this.id = id;
+        this.repositoryId = repositoryId;
         this.linkId = linkId;
         this.fullName = fullName;
         this.forksCount = forksCount;
@@ -63,19 +63,19 @@ public class GithubRepository implements Serializable {
     }
 
     /**
-     * Getter for <code>GITHUB_REPOSITORY.ID</code>.
+     * Getter for <code>GITHUB_REPOSITORY.REPOSITORY_ID</code>.
      */
     @jakarta.validation.constraints.NotNull
     @NotNull
-    public Long getId() {
-        return this.id;
+    public Long getRepositoryId() {
+        return this.repositoryId;
     }
 
     /**
-     * Setter for <code>GITHUB_REPOSITORY.ID</code>.
+     * Setter for <code>GITHUB_REPOSITORY.REPOSITORY_ID</code>.
      */
-    public void setId(@NotNull Long id) {
-        this.id = id;
+    public void setRepositoryId(@NotNull Long repositoryId) {
+        this.repositoryId = repositoryId;
     }
 
     /**
@@ -150,11 +150,11 @@ public class GithubRepository implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         final GithubRepository other = (GithubRepository) obj;
-        if (this.id == null) {
-            if (other.id != null)
+        if (this.repositoryId == null) {
+            if (other.repositoryId != null)
                 return false;
         }
-        else if (!this.id.equals(other.id))
+        else if (!this.repositoryId.equals(other.repositoryId))
             return false;
         if (this.linkId == null) {
             if (other.linkId != null)
@@ -187,7 +187,7 @@ public class GithubRepository implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.repositoryId == null) ? 0 : this.repositoryId.hashCode());
         result = prime * result + ((this.linkId == null) ? 0 : this.linkId.hashCode());
         result = prime * result + ((this.fullName == null) ? 0 : this.fullName.hashCode());
         result = prime * result + ((this.forksCount == null) ? 0 : this.forksCount.hashCode());
@@ -199,7 +199,7 @@ public class GithubRepository implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder("GithubRepository (");
 
-        sb.append(id);
+        sb.append(repositoryId);
         sb.append(", ").append(linkId);
         sb.append(", ").append(fullName);
         sb.append(", ").append(forksCount);
