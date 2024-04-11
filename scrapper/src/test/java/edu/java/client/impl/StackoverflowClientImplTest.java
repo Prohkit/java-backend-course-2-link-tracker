@@ -16,6 +16,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.ok;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @WireMockTest(httpPort = 8082)
 public class StackoverflowClientImplTest {
@@ -40,7 +42,7 @@ public class StackoverflowClientImplTest {
     }
 
     @Test
-    public void testFetchPost() {
+    public void fetchQuestion_shouldReturnQuestionResponse() {
         long questionId = 1642028L;
         stubFor(get(urlEqualTo("/questions/" + questionId + "/?site=stackoverflow&filter=withbody"))
             .willReturn(ok()
@@ -76,5 +78,24 @@ public class StackoverflowClientImplTest {
                 true,
                 20
             );
+    }
+
+    @Test
+    void getQuestionId_shouldReturnQuestionId_whenUrlIsCorrect() {
+        String urlWithQuestionId = "stackoverflow.com/questions/1";
+        Long excepted = 1L;
+
+        Long result = stackOverflowClient.getQuestionId(urlWithQuestionId);
+
+        assertEquals(result, excepted);
+    }
+
+    @Test
+    void getQuestionId_shouldReturnNull_whenUrlIsIncorrect() {
+        String incorrectUrl = "StackOverFlow.com/questions/1";
+
+        Long result = stackOverflowClient.getQuestionId(incorrectUrl);
+
+        assertNull(result);
     }
 }
