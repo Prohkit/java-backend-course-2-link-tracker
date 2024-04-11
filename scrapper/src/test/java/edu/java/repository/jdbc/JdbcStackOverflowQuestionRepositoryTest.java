@@ -2,7 +2,6 @@ package edu.java.repository.jdbc;
 
 import edu.java.domain.Link;
 import edu.java.domain.StackOverflowQuestion;
-import edu.java.repository.StackOverflowQuestionRepository;
 import edu.java.scrapper.IntegrationTest;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
 class JdbcStackOverflowQuestionRepositoryTest extends IntegrationTest {
     @Autowired
-    StackOverflowQuestionRepository stackOverflowQuestionRepository;
+    private JdbcStackOverflowQuestionRepository stackOverflowQuestionRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

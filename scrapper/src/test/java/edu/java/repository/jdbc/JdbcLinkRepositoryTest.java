@@ -1,7 +1,6 @@
 package edu.java.repository.jdbc;
 
 import edu.java.domain.Link;
-import edu.java.repository.LinkRepository;
 import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
 import java.util.List;
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
 class JdbcLinkRepositoryTest extends IntegrationTest {
     @Autowired
-    private LinkRepository linkRepository;
+    private JdbcLinkRepository linkRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

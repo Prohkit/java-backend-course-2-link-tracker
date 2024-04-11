@@ -1,7 +1,6 @@
 package edu.java.repository.jdbc;
 
 import edu.java.domain.Chat;
-import edu.java.repository.TelegramChatRepository;
 import edu.java.scrapper.IntegrationTest;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class JdbcTelegramChatRepositoryTest extends IntegrationTest {
 
     @Autowired
-    private TelegramChatRepository chatRepository;
+    private JdbcTelegramChatRepository chatRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

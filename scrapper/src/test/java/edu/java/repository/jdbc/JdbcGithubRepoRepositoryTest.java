@@ -2,7 +2,6 @@ package edu.java.repository.jdbc;
 
 import edu.java.domain.GithubRepository;
 import edu.java.domain.Link;
-import edu.java.repository.GithubRepoRepository;
 import edu.java.scrapper.IntegrationTest;
 import java.time.OffsetDateTime;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
 class JdbcGithubRepoRepositoryTest extends IntegrationTest {
     @Autowired
-    private GithubRepoRepository githubRepository;
+    private JdbcGithubRepoRepository githubRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
