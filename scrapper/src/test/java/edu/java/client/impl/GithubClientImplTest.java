@@ -1,8 +1,8 @@
 package edu.java.client.impl;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import edu.java.client.github.GithubClient;
 import edu.java.client.github.dto.RepositoryResponse;
-import edu.java.client.github.impl.GithubClientImpl;
 import edu.java.configuration.ClientConfiguration;
 import edu.java.configuration.RetryConfig;
 import edu.java.service.GithubRepoService;
@@ -16,11 +16,13 @@ import static com.github.tomakehurst.wiremock.client.WireMock.ok;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @WireMockTest(httpPort = 8082)
 public class GithubClientImplTest {
 
-    private static GithubClientImpl githubClient;
+    private static GithubClient githubClient;
 
     private static GithubRepoService githubRepoService;
 
@@ -40,7 +42,7 @@ public class GithubClientImplTest {
     }
 
     @Test
-    public void testFetchPost() {
+    public void fetchRepository_shouldReturnRepositoryResponse() {
         String ownerUserName = "Prohkit";
         String repositoryName = "java-backend-course-2-link-tracker";
         stubFor(get(urlEqualTo("/repos/" + ownerUserName + "/" + repositoryName))
@@ -64,5 +66,43 @@ public class GithubClientImplTest {
                 1642028L,
                 "Prohkit/java-backend-course-2-link-tracker"
             );
+    }
+
+    @Test
+    void getOwnerUserName_shouldReturnOwnerUserName_whenUrlIsCorrect() {
+        String urlWithOwnerUserName = "github.com/TestOwnerUserName/TestGithubRepositoryName";
+        String excepted = "TestOwnerUserName";
+
+        String result = githubClient.getOwnerUserName(urlWithOwnerUserName);
+
+        assertEquals(result, excepted);
+    }
+
+    @Test
+    void getOwnerUserName_shouldReturnNull_whenUrlIsIncorrect() {
+        String incorrectGithubUrl = "githab.com/TestOwnerUserName/TestGithubRepositoryName";
+
+        String result = githubClient.getOwnerUserName(incorrectGithubUrl);
+
+        assertNull(result);
+    }
+
+    @Test
+    void getRepositoryName_shouldReturnOwnerUserName_whenUrlIsCorrect() {
+        String urlWithRepositoryName = "github.com/TestOwnerUserName/TestGithubRepositoryName";
+        String excepted = "TestGithubRepositoryName";
+
+        String result = githubClient.getRepositoryName(urlWithRepositoryName);
+
+        assertEquals(result, excepted);
+    }
+
+    @Test
+    void getRepositoryName_shouldReturnNull_whenUrlIsIncorrect() {
+        String incorrectGithubUrl = "githab.com/TestOwnerUserName/TestGithubRepositoryName";
+
+        String result = githubClient.getRepositoryName(incorrectGithubUrl);
+
+        assertNull(result);
     }
 }
