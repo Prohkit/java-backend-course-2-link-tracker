@@ -21,7 +21,7 @@ public class JdbcGithubRepoRepository implements GithubRepoRepository {
     @Override
     @Transactional
     public GithubRepository addGithubRepository(GithubRepository githubRepository, Long linkId) {
-        String insertSql = "insert into github_repository (id, link_id, full_name, forks_count, updated_at) "
+        String insertSql = "insert into github_repository (repository_id, link_id, full_name, forks_count, updated_at) "
             + "VALUES (?, ?, ?, ?, ?) returning *";
 
         return jdbcTemplate.queryForObject(

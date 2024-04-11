@@ -22,7 +22,7 @@ public class JooqStackOverflowQuestionRepository implements StackOverflowQuestio
     public StackOverflowQuestion addStackOverflowQuestion(StackOverflowQuestion stackOverflowQuestion, Long linkId) {
         return dslContext.insertInto(
                 STACKOVERFLOW_QUESTION,
-                STACKOVERFLOW_QUESTION.ID,
+                STACKOVERFLOW_QUESTION.QUESTION_ID,
                 STACKOVERFLOW_QUESTION.LINK_ID,
                 STACKOVERFLOW_QUESTION.TITLE,
                 STACKOVERFLOW_QUESTION.IS_ANSWERED,
