@@ -29,7 +29,6 @@ import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -65,9 +64,9 @@ public class StackoverflowQuestion extends TableImpl<StackoverflowQuestionRecord
     }
 
     /**
-     * The column <code>STACKOVERFLOW_QUESTION.ID</code>.
+     * The column <code>STACKOVERFLOW_QUESTION.QUESTION_ID</code>.
      */
-    public final TableField<StackoverflowQuestionRecord, Long> ID = createField(DSL.name("ID"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<StackoverflowQuestionRecord, Long> QUESTION_ID = createField(DSL.name("QUESTION_ID"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>STACKOVERFLOW_QUESTION.LINK_ID</code>.
@@ -136,12 +135,6 @@ public class StackoverflowQuestion extends TableImpl<StackoverflowQuestionRecord
     @Nullable
     public Schema getSchema() {
         return aliased() ? null : DefaultSchema.DEFAULT_SCHEMA;
-    }
-
-    @Override
-    @NotNull
-    public UniqueKey<StackoverflowQuestionRecord> getPrimaryKey() {
-        return Keys.CONSTRAINT_9D;
     }
 
     @Override

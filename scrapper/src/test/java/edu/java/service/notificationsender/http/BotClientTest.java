@@ -1,11 +1,10 @@
-package edu.java.client;
+package edu.java.service.notificationsender.http;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.dto.bot.LinkUpdate;
+import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
 import java.util.List;
-import edu.java.scrapper.IntegrationTest;
-import edu.java.service.notificationsender.http.BotClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +16,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 
 @WireMockTest(httpPort = 8090)
-@SpringBootTest
+@SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
 class BotClientTest extends IntegrationTest {
 
     @Autowired

@@ -29,7 +29,6 @@ import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -65,9 +64,9 @@ public class GithubRepository extends TableImpl<GithubRepositoryRecord> {
     }
 
     /**
-     * The column <code>GITHUB_REPOSITORY.ID</code>.
+     * The column <code>GITHUB_REPOSITORY.REPOSITORY_ID</code>.
      */
-    public final TableField<GithubRepositoryRecord, Long> ID = createField(DSL.name("ID"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<GithubRepositoryRecord, Long> REPOSITORY_ID = createField(DSL.name("REPOSITORY_ID"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>GITHUB_REPOSITORY.LINK_ID</code>.
@@ -126,12 +125,6 @@ public class GithubRepository extends TableImpl<GithubRepositoryRecord> {
     @Nullable
     public Schema getSchema() {
         return aliased() ? null : DefaultSchema.DEFAULT_SCHEMA;
-    }
-
-    @Override
-    @NotNull
-    public UniqueKey<GithubRepositoryRecord> getPrimaryKey() {
-        return Keys.CONSTRAINT_B3;
     }
 
     @Override

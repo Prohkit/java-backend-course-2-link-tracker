@@ -23,7 +23,7 @@ public class JdbcStackOverflowQuestionRepository implements StackOverflowQuestio
     @Transactional
     public StackOverflowQuestion addStackOverflowQuestion(StackOverflowQuestion stackOverflowQuestion, Long linkId) {
         String insertSql =
-            "insert into stackoverflow_question (id, link_id, title, is_answered, score,"
+            "insert into stackoverflow_question (question_id, link_id, title, is_answered, score,"
                 + " answer_count, last_activity_date) VALUES (?, ?, ?, ?, ?, ?, ?) returning *";
         return jdbcTemplate.queryForObject(
             insertSql,

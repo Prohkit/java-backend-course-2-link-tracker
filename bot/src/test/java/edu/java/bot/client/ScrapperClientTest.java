@@ -33,7 +33,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @WireMockTest(httpPort = 8080)
-@SpringBootTest
+@SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
 class ScrapperClientTest {
 
     @Autowired

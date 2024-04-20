@@ -44,10 +44,8 @@ public class Keys {
 
     public static final UniqueKey<ChatRecord> CONSTRAINT_1 = Internal.createUniqueKey(Chat.CHAT, DSL.name("CONSTRAINT_1"), new TableField[] { Chat.CHAT.ID }, true);
     public static final UniqueKey<ChatLinkRecord> CONSTRAINT_8 = Internal.createUniqueKey(ChatLink.CHAT_LINK, DSL.name("CONSTRAINT_8"), new TableField[] { ChatLink.CHAT_LINK.LINK_ID, ChatLink.CHAT_LINK.CHAT_ID }, true);
-    public static final UniqueKey<GithubRepositoryRecord> CONSTRAINT_B3 = Internal.createUniqueKey(GithubRepository.GITHUB_REPOSITORY, DSL.name("CONSTRAINT_B3"), new TableField[] { GithubRepository.GITHUB_REPOSITORY.ID }, true);
     public static final UniqueKey<LinkRecord> CONSTRAINT_2 = Internal.createUniqueKey(Link.LINK, DSL.name("CONSTRAINT_2"), new TableField[] { Link.LINK.ID }, true);
     public static final UniqueKey<LinkRecord> CONSTRAINT_23 = Internal.createUniqueKey(Link.LINK, DSL.name("CONSTRAINT_23"), new TableField[] { Link.LINK.URL }, true);
-    public static final UniqueKey<StackoverflowQuestionRecord> CONSTRAINT_9D = Internal.createUniqueKey(StackoverflowQuestion.STACKOVERFLOW_QUESTION, DSL.name("CONSTRAINT_9D"), new TableField[] { StackoverflowQuestion.STACKOVERFLOW_QUESTION.ID }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions

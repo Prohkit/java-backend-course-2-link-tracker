@@ -31,7 +31,7 @@ public class StackoverflowQuestion implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private Long questionId;
     private Long linkId;
     private String title;
     private Boolean isAnswered;
@@ -42,7 +42,7 @@ public class StackoverflowQuestion implements Serializable {
     public StackoverflowQuestion() {}
 
     public StackoverflowQuestion(StackoverflowQuestion value) {
-        this.id = value.id;
+        this.questionId = value.questionId;
         this.linkId = value.linkId;
         this.title = value.title;
         this.isAnswered = value.isAnswered;
@@ -51,9 +51,9 @@ public class StackoverflowQuestion implements Serializable {
         this.lastActivityDate = value.lastActivityDate;
     }
 
-    @ConstructorProperties({ "id", "linkId", "title", "isAnswered", "score", "answerCount", "lastActivityDate" })
+    @ConstructorProperties({ "questionId", "linkId", "title", "isAnswered", "score", "answerCount", "lastActivityDate" })
     public StackoverflowQuestion(
-        @NotNull Long id,
+        @NotNull Long questionId,
         @Nullable Long linkId,
         @NotNull String title,
         @NotNull Boolean isAnswered,
@@ -61,7 +61,7 @@ public class StackoverflowQuestion implements Serializable {
         @NotNull Long answerCount,
         @Nullable OffsetDateTime lastActivityDate
     ) {
-        this.id = id;
+        this.questionId = questionId;
         this.linkId = linkId;
         this.title = title;
         this.isAnswered = isAnswered;
@@ -71,19 +71,19 @@ public class StackoverflowQuestion implements Serializable {
     }
 
     /**
-     * Getter for <code>STACKOVERFLOW_QUESTION.ID</code>.
+     * Getter for <code>STACKOVERFLOW_QUESTION.QUESTION_ID</code>.
      */
     @jakarta.validation.constraints.NotNull
     @NotNull
-    public Long getId() {
-        return this.id;
+    public Long getQuestionId() {
+        return this.questionId;
     }
 
     /**
-     * Setter for <code>STACKOVERFLOW_QUESTION.ID</code>.
+     * Setter for <code>STACKOVERFLOW_QUESTION.QUESTION_ID</code>.
      */
-    public void setId(@NotNull Long id) {
-        this.id = id;
+    public void setQuestionId(@NotNull Long questionId) {
+        this.questionId = questionId;
     }
 
     /**
@@ -190,11 +190,11 @@ public class StackoverflowQuestion implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         final StackoverflowQuestion other = (StackoverflowQuestion) obj;
-        if (this.id == null) {
-            if (other.id != null)
+        if (this.questionId == null) {
+            if (other.questionId != null)
                 return false;
         }
-        else if (!this.id.equals(other.id))
+        else if (!this.questionId.equals(other.questionId))
             return false;
         if (this.linkId == null) {
             if (other.linkId != null)
@@ -239,7 +239,7 @@ public class StackoverflowQuestion implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.questionId == null) ? 0 : this.questionId.hashCode());
         result = prime * result + ((this.linkId == null) ? 0 : this.linkId.hashCode());
         result = prime * result + ((this.title == null) ? 0 : this.title.hashCode());
         result = prime * result + ((this.isAnswered == null) ? 0 : this.isAnswered.hashCode());
@@ -253,7 +253,7 @@ public class StackoverflowQuestion implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder("StackoverflowQuestion (");
 
-        sb.append(id);
+        sb.append(questionId);
         sb.append(", ").append(linkId);
         sb.append(", ").append(title);
         sb.append(", ").append(isAnswered);

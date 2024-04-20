@@ -72,7 +72,8 @@ public class LinkServiceImpl implements LinkService {
     public boolean isLinkConnectedToChat(long telegramChat, URI url) {
         Link linkToCheck = Link.builder().url(url).build();
         if (linkRepository.isLinkExists(linkToCheck)) {
-            return linkRepository.isChatLinkRelationshipExists(telegramChat, telegramChat);
+            Link link = linkRepository.findLinkByUrl(url);
+            return linkRepository.isChatLinkRelationshipExists(telegramChat, link.getId());
         }
         return false;
     }

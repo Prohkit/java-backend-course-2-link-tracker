@@ -21,7 +21,7 @@ public class JooqGithubRepoRepository implements GithubRepoRepository {
     public GithubRepository addGithubRepository(GithubRepository githubRepository, Long linkId) {
         return dslContext.insertInto(
                 GITHUB_REPOSITORY,
-                GITHUB_REPOSITORY.ID,
+                GITHUB_REPOSITORY.REPOSITORY_ID,
                 GITHUB_REPOSITORY.LINK_ID,
                 GITHUB_REPOSITORY.FULL_NAME,
                 GITHUB_REPOSITORY.FORKS_COUNT,
