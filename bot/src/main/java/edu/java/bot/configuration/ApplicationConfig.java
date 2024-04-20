@@ -11,7 +11,8 @@ import org.springframework.validation.annotation.Validated;
 public record ApplicationConfig(
     @NotEmpty
     String telegramToken,
-    KafkaConfigurationProperties kafkaConfigurationProperties
+    KafkaConfigurationProperties kafkaConfigurationProperties,
+    Micrometer micrometer
 ) {
     @Bean TelegramBot telegramBot() {
         return new TelegramBot(telegramToken);
@@ -25,6 +26,16 @@ public record ApplicationConfig(
             String name,
             Integer partitions,
             Integer replicas
+        ) {
+        }
+    }
+
+    public record Micrometer(
+        ProcessedMessagesCounter processedMessagesCounter
+    ) {
+        public record ProcessedMessagesCounter(
+            String name,
+            String description
         ) {
         }
     }

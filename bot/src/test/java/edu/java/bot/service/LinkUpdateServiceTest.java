@@ -1,6 +1,7 @@
 package edu.java.bot.service;
 
 import edu.java.dto.bot.LinkUpdate;
+import io.micrometer.core.instrument.Counter;
 import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,9 @@ import static org.mockito.Mockito.verify;
 class LinkUpdateServiceTest {
     @InjectMocks
     private LinkUpdateService linkUpdateService;
+
+    @Mock
+    private Counter processedMessagesCounter;
 
     @Mock
     private SendMessageService sendMessageService;

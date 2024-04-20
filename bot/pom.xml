@@ -19,6 +19,26 @@
             <version>0.1</version>
         </dependency>
 
+        <!-- Metrics -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-brave</artifactId>
+        </dependency>
+
         <!-- Bucket4j -->
         <dependency>
             <groupId>com.giffing.bucket4j.spring.boot.starter</groupId>
